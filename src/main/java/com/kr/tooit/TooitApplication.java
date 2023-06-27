@@ -11,5 +11,4 @@ public class TooitApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TooitApplication.class, args);
 	}
-
 }

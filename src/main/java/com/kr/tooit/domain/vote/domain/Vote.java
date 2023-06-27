@@ -56,11 +56,11 @@ public class Vote {
     private LocalDateTime modifiedDate; // 게시글 수정 날짜
 
     @Column(name = "DELETE_STATUS") // 게시글 삭제 여부
-    @ColumnDefault("N")
+    @ColumnDefault("'N'")
     private String deleteStatus;
 
     @Column(name = "DEADLINE_STATUS") // 게시글 투표 마감 여부
-    @ColumnDefault("N")
+    @ColumnDefault("'N'")
     private String deadlineStatus;
 
     @ManyToOne
