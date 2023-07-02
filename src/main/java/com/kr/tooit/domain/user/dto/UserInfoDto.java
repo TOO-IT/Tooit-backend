@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoResponse {
+public class UserInfoDto {
 
     private Long id;
     private String email;

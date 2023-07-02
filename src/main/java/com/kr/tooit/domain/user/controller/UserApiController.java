@@ -1,6 +1,6 @@
 package com.kr.tooit.domain.user.controller;
 
-import com.kr.tooit.domain.user.dto.UserInfoResponse;
+import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
 import com.kr.tooit.domain.user.service.RefreshTokenRepository;
 import com.kr.tooit.domain.user.service.UserService;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserApiController {
 
-    private final RefreshTokenRepository refreshTokenRepository;
-
     private final UserService userService;
 
     /**
@@ -26,12 +24,23 @@ public class UserApiController {
      * @return UserInfo
      */
     @PostMapping("/api/userInfo")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestBody @NotNull CreateAccessTokenRequest request) {
-        UserInfoResponse findUserInfo = userService.getUserInfo(request.getRefreshToken());
+    public ResponseEntity<UserInfoDto> getUserInfo(@RequestBody @NotNull CreateAccessTokenRequest request) {
+        UserInfoDto findUserInfo = userService.getUserInfo(request.getRefreshToken());
         if(findUserInfo == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(findUserInfo);
+    }
+
+    /**
+     * 사용자 닉네임 수정
+     * @param request
+     * @return UserInfoDto
+     */
+    @PostMapping("/api/updateNickname")
+    public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserInfoDto request) {
+        UserInfoDto response = userService.updateNickname(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

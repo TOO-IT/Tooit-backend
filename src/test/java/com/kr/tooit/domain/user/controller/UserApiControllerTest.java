@@ -5,6 +5,7 @@ import com.kr.tooit.domain.user.domain.RefreshToken;
 import com.kr.tooit.domain.user.domain.Role;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
+import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.service.RefreshTokenRepository;
 import com.kr.tooit.domain.user.service.UserRepository;
 import com.kr.tooit.domain.user.service.UserService;
@@ -107,5 +108,4 @@ class UserApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
-
 }
