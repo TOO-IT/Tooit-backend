@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>이미지 업로드</title>
+</head>
+<body>
+<main class="flex-grow flex items-center justify-center" layout:fragment="main">
+    <div class="profile">
+        <h1>이미지 업로드 테스트</h1><br>
+        <form enctype="multipart/form-data" method="post" th:action="@{/upload/vote}">
+            <input multiple name="files" type="file"/>
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
+</main>
+</body>
+</html>
