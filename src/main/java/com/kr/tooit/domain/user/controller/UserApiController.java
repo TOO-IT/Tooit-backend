@@ -2,13 +2,13 @@ package com.kr.tooit.domain.user.controller;
 
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
-import com.kr.tooit.domain.user.service.RefreshTokenRepository;
 import com.kr.tooit.domain.user.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,10 +37,9 @@ public class UserApiController {
      * @param request
      * @return UserInfoDto
      */
-    @PostMapping("/api/updateNickname")
+    @PutMapping("/api/nickname")
     public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserInfoDto request) {
         UserInfoDto response = userService.updateNickname(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 }
