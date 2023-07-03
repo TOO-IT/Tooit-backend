@@ -53,41 +53,6 @@ class UserTokenControllerTest {
         userRepository.deleteAll();
     }
 
-//    @DisplayName("createNewAccessToken : 새로운 액세스 토큰을 발급한다.")
-//    @Test
-//    public void createNewAccessToken() throws Exception {
-//        // given
-//        final String url = "/api/token";
-//
-//        User testUser = userRepository.save(User.builder()
-//                .email("test2@test.com")
-//                .nickname("testsetsetse")
-//                .provider("test")
-//                .providerId("test12")
-//                .build());
-//
-//        String refreshToken = JwtFactory.builder()
-//                .claims(Map.of("id", testUser.getId()))
-//                .build()
-//                .createToken(jwtProperties);
-//
-//        refreshTokenRepository.save(new RefreshToken(testUser.getId(), refreshToken));
-//        System.out.println("save 후 refreshToken : " + refreshToken);
-//        CreateAccessTokenRequest request = new CreateAccessTokenRequest();
-//        request.setRefreshToken(refreshToken);
-//        System.out.println("request : " + request.toString());
-//        final String requestBody = objectMapper.writeValueAsString(request);
-//
-//        // when
-//        ResultActions resultActions = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestBody));
-//
-//        // then
-//        resultActions
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.accessToken").isNotEmpty());
-//    }
-
     @DisplayName("createNewAccessToken : 새로운 엑세스 토큰 발급")
     @Test
     public void createNewAccessToken() throws Exception {
