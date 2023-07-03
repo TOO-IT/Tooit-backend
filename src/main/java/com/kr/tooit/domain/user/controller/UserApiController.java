@@ -7,13 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/tooit/")
 public class UserApiController {
 
     private final UserService userService;
@@ -23,7 +21,7 @@ public class UserApiController {
      * @param request(refreshToken)
      * @return UserInfo
      */
-    @PostMapping("/api/userInfo")
+    @PostMapping("/userInfo")
     public ResponseEntity<UserInfoDto> getUserInfo(@RequestBody @NotNull CreateAccessTokenRequest request) {
         UserInfoDto findUserInfo = userService.getUserInfo(request.getRefreshToken());
         if(findUserInfo == null) {
@@ -37,7 +35,7 @@ public class UserApiController {
      * @param request
      * @return UserInfoDto
      */
-    @PutMapping("/api/nickname")
+    @PutMapping("/nickname")
     public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserInfoDto request) {
         UserInfoDto response = userService.updateNickname(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);

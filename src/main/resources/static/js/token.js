@@ -26,7 +26,7 @@ if(testBtn) {
             testP.innerHTML = '<div style=\"color:blue\">실패<div>';
         }
 
-        httpRequest("POST", "/api/test", body, success, fail);
+        httpRequest("POST", "/tooit/test", body, success, fail);
     });
 };
 
@@ -41,7 +41,7 @@ if(testEmailBtn) {
         function fail() {
             testEmail.innerHTML = '<div style=\"color:blue\"><div>'
         }
-        httpRequest("POST", "/api/userInfo", body, success, fail)
+        httpRequest("POST", "/tooit/userInfo", body, success, fail)
     })
     ;
 }
@@ -80,7 +80,7 @@ function httpRequest(method, url, body, success, fail) {
         }
         const refresh_token = getCookie("refresh_token");
         if(response.status === 401 && refresh_token) {
-            fetch("/api/token", {
+            fetch("/tooit/token", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("access_token"),

@@ -57,7 +57,7 @@ public class WebOAuthSecurityConfig {
         http.authorizeHttpRequests((authReq)
                 -> authReq.requestMatchers("/tooit","/api/token", "/login/**",
                         "/oauth2/authorization/**", "/js/**","/favicon.ico", "/tooit-api.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/tooit/**").authenticated()
                 .anyRequest().permitAll());
 
         http.oauth2Login((login) -> login.loginPage("/login")
