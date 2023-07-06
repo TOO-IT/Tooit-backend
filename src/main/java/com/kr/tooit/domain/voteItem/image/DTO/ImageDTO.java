@@ -1,4 +1,4 @@
-package com.kr.tooit.domain.voteItem.image.DTO;
+package com.kr.tooit.domain.voteItem.image.dto;
 
 import lombok.Builder;
 import lombok.Getter;

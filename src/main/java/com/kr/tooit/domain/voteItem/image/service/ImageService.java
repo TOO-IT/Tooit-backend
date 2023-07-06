@@ -17,8 +17,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kr.tooit.domain.user.domain.User;
-import com.kr.tooit.domain.voteItem.image.DTO.ImageDTO;
 import com.kr.tooit.domain.voteItem.image.VoteImage;
+import com.kr.tooit.domain.voteItem.image.dto.ImageDTO;
 import com.kr.tooit.domain.voteItem.image.repository.VoteImageRepository;
 
 import lombok.RequiredArgsConstructor;
