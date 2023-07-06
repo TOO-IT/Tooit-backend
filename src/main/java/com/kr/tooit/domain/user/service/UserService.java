@@ -2,11 +2,14 @@ package com.kr.tooit.domain.user.service;
 
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.domain.User;
+import com.kr.tooit.global.error.CustomException;
+import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -55,15 +58,22 @@ public class UserService {
 
         String newNickname = request.getNickname();
         if(findUser.isEmpty()) {
-            throw new IllegalArgumentException("Unexpected user");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         if(newNickname.length() > 15 || newNickname.isEmpty()) {
-            throw new DataIntegrityViolationException("닉네임은 15글자 이하로 작성해주세요.");
+            throw new CustomException(ErrorCode.BAD_NICKNAME);
         }
 
         if(newNickname == findUser.get().getNickname()) {
             return request;
+        }
+
+        // 닉네임 중복체크
+        boolean flag = dupCheckNickname(request.getNickname());
+
+        if(flag) {
+            throw new CustomException(ErrorCode.HAS_NICKNAME);
         }
 
         findUser.get().updateNickname(newNickname);
@@ -71,5 +81,19 @@ public class UserService {
         UserInfoDto updateUserInfo = new UserInfoDto(findUser.get().getId(),
                 findUser.get().getEmail(), findUser.get().getNickname());
         return updateUserInfo;
+    }
+
+
+    /**
+     * 사용자 닉네임 중복체크
+     * @param nickname
+     * @return boolean
+     */
+    public boolean dupCheckNickname(String nickname) {
+        Optional<User> findUser = userRepository.findByNickname(nickname);
+
+        if(findUser.isEmpty()) return false;
+
+        return true;
     }
 }
