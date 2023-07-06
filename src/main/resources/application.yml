@@ -2,10 +2,13 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
+    include: secret
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     generate-ddl: true
 
   datasource:
@@ -13,11 +16,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: tooit
     password: tooit!
-
-  s3:
-    accessKey:
-    secretKey:
-    bucket:
 
   # OAuth2 SNS Login(google, naver, kakao)
   security:
@@ -85,6 +83,15 @@ springdoc:
     cache:
       disabled: true
 
-custom:
-  image:
-    upload-dir: https://kr.object.ncloudstorage.com/tooit/
+# AWS S3
+cloud:
+  aws:
+    s3:
+      bucket:
+    stack:
+      auto: false
+    region:
+      static:
+    credentials:
+      accessKey:
+      secretKey:
