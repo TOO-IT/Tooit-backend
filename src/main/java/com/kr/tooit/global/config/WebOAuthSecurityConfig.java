@@ -42,7 +42,6 @@ public class WebOAuthSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("filterChain 진입");
         http.csrf((csrf) -> csrf.disable())
                 .httpBasic((httpBasic) -> httpBasic.disable())
                 .formLogin((formLogin) -> formLogin.disable())
@@ -58,8 +57,8 @@ public class WebOAuthSecurityConfig {
         http.authorizeHttpRequests((authReq)
                 -> authReq.requestMatchers("/tooit","/api/token", "/login/**",
                         "/oauth2/authorization/**", "/js/**","/favicon.ico", "/tooit-api.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/api/**").hasRole(Role.USER.name())
-                .anyRequest().authenticated());
+                .requestMatchers("/tooit/**").authenticated()
+                .anyRequest().permitAll());
 
         http.oauth2Login((login) -> login.loginPage("/login")
                 .authorizationEndpoint((endPoint)

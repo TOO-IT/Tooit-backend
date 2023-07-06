@@ -12,6 +12,8 @@ function searchParam(key) {
 
 const testBtn = document.getElementById("testBtn");
 const testP = document.getElementById("testP");
+const testEmailBtn = document.getElementById("testEmailBtn");
+const testEmail = document.getElementById("testEmail");
 if(testBtn) {
     testBtn.addEventListener("click", (event) => {
         body = JSON.stringify({
@@ -24,8 +26,24 @@ if(testBtn) {
             testP.innerHTML = '<div style=\"color:blue\">실패<div>';
         }
 
-        httpRequest("POST", "/api/test", body, success, fail);
+        httpRequest("POST", "/tooit/test", body, success, fail);
     });
+};
+
+if(testEmailBtn) {
+    testEmailBtn.addEventListener("click", (event) => {
+        body = JSON.stringify({
+            refreshToken : getCookie("refresh_token")
+        });
+        function success(res) {
+            testEmail.innerHTML = '<div style=\"color:blue\">${res.userInfo.email}<div>'
+        }
+        function fail() {
+            testEmail.innerHTML = '<div style=\"color:blue\"><div>'
+        }
+        httpRequest("POST", "/tooit/userInfo", body, success, fail)
+    })
+    ;
 }
 
 
@@ -58,11 +76,11 @@ function httpRequest(method, url, body, success, fail) {
         body: body,
     }).then((response) => {
         if(response.status === 200 || response.status === 201) {
-            return success();
+            return success(response);
         }
         const refresh_token = getCookie("refresh_token");
         if(response.status === 401 && refresh_token) {
-            fetch("/api/token", {
+            fetch("/tooit/token", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("access_token"),
