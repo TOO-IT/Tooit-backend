@@ -28,11 +28,16 @@ public class VoteItemService {
 	private String bucket;
 
 	public String uploadFile(MultipartFile multipartFile) throws IOException {
-
 		String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
 
-		s3Client.putObject(new PutObjectRequest(bucket, VOTE_IMAGE_FOLDER + fileName, multipartFile.getInputStream(),
-			new ObjectMetadata()));
+		// 이미지가 있는지 확인하고 Content-Type을 설정
+		ObjectMetadata objectMetadata = new ObjectMetadata();
+		if (multipartFile.getContentType() != null) {
+			objectMetadata.setContentType(multipartFile.getContentType());
+		}
+
+		s3Client.putObject(
+			new PutObjectRequest(bucket, VOTE_IMAGE_FOLDER + fileName, multipartFile.getInputStream(), objectMetadata));
 
 		return s3Client.getUrl(bucket, VOTE_IMAGE_FOLDER + fileName).toString();
 	}
