@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/upload")
+@RequestMapping("/api/upload")
 public class ImageController {
 	private final ImageService imageService;
 
@@ -32,5 +32,13 @@ public class ImageController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(imageService.uploadImagesSample(multipartFiles));
+	}
+
+	@PostMapping("/vote")
+	public ResponseEntity<Object> uploadImageVote(
+		@RequestPart(value = "files") List<MultipartFile> multipartFiles) {
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(imageService.uploadImageVote(null, multipartFiles));
 	}
 }

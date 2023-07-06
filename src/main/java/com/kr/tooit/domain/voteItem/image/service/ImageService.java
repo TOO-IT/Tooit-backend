@@ -109,6 +109,8 @@ public class ImageService {
 					.uploadFilePath(filePath)
 					.uploadFileUrl(uploadFileUrl)
 					.build());
+
+			System.out.println(uploadFileUrl);
 		}
 
 		return s3Images;
