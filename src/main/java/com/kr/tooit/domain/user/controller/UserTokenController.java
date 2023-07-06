@@ -11,11 +11,12 @@ import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/tooit/")
 public class UserTokenController {
 
     private final TokenService tokenService;
 
-    @PostMapping("/api/token")
+    @PostMapping("/tooit/token")
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken
             (@RequestBody @NotNull CreateAccessTokenRequest request) {
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
@@ -24,7 +25,7 @@ public class UserTokenController {
                 .body(new CreateAccessTokenResponse(newAccessToken));
     }
 
-    @PostMapping("/api/test")
+    @PostMapping("/tooit/test")
     public void testApi(@RequestBody String test ) {
         System.out.println("testApi is param : " + test);
     }
