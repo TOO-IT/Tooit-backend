@@ -42,7 +42,7 @@ public class VoteItemService {
 		return s3Client.getUrl(bucket, VOTE_IMAGE_FOLDER + fileName).toString();
 	}
 
-	public VoteItem saveVoteItem(VoteImage voteImage) throws IOException {
+	public String saveVoteItem(VoteImage voteImage) throws IOException {
 		String imageUrl = uploadFile(voteImage.getImageFile());
 
 		VoteItem voteItem = VoteItem.builder()
@@ -52,6 +52,7 @@ public class VoteItemService {
 			.content("test_content")
 			.build();
 
-		return voteItemRepository.save(voteItem);
+		voteItemRepository.save(voteItem);
+		return imageUrl;
 	}
 }

@@ -31,8 +31,8 @@ public class ImageController {
 	public ResponseEntity<Object> uploadFile(@RequestParam("image") MultipartFile image) {
 		try {
 			VoteImage voteImage = new VoteImage(image);
-			voteItemService.saveVoteItem(voteImage);
-			return ResponseEntity.ok().build();
+			String imageUrl = voteItemService.saveVoteItem(voteImage);
+			return ResponseEntity.ok(imageUrl);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
