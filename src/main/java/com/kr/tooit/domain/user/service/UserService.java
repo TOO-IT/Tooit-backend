@@ -1,16 +1,17 @@
 package com.kr.tooit.domain.user.service;
 
+
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.global.error.CustomException;
 import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
@@ -65,7 +66,7 @@ public class UserService {
             throw new CustomException(ErrorCode.BAD_NICKNAME);
         }
 
-        if(newNickname == findUser.get().getNickname()) {
+        if (newNickname == findUser.get().getNickname()) {
             return request;
         }
 
@@ -79,9 +80,10 @@ public class UserService {
         findUser.get().updateNickname(newNickname);
 
         UserInfoDto updateUserInfo = new UserInfoDto(findUser.get().getId(),
-                findUser.get().getEmail(), findUser.get().getNickname());
+            findUser.get().getEmail(), findUser.get().getNickname());
         return updateUserInfo;
     }
+
 
 
     /**
@@ -95,5 +97,15 @@ public class UserService {
         if(findUser.isEmpty()) return false;
 
         return true;
+
+    /**
+     * 현재 로그인한 사용자 정보 가져오기
+     * @return
+     */
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }

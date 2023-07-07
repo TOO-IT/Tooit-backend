@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Image Upload Test</title>
+</head>
+<body>
+<h1>Image Upload Test</h1>
+<form enctype="multipart/form-data" id="uploadForm">
+    <div>
+        <label for="image">Choose file:</label>
+        <input id="image" name="image" type="file"/>
+    </div>
+    <div>
+        <button type="submit">Upload</button>
+    </div>
+</form>
+<div id="uploadedImageContainer"></div>
+<script>
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const response = await fetch("/api/upload/voteImage", {
+            method: "POST",
+            body: formData,
+        });
+        if (response.ok) {
+            const uploadedImageUrl = await response.text();
+            const imgElement = document.createElement("img");
+            imgElement.src = uploadedImageUrl;
+            imgElement.alt = "Uploaded Image";
+            document.getElementById("uploadedImageContainer").appendChild(imgElement);
+        } else {
+            alert("Error occurred while uploading image: " + response.status);
+        }
+    });
+</script>
+</body>
+</html>
