@@ -2,10 +2,13 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
+    include: secret
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     generate-ddl: true
 
   datasource:
@@ -14,8 +17,7 @@ spring:
     username: tooit
     password: tooit!
 
-
-# OAuth2 SNS Login(google, naver, kakao)
+  # OAuth2 SNS Login(google, naver, kakao)
   security:
     oauth2:
       client:
@@ -80,3 +82,16 @@ springdoc:
       enabled: true
     cache:
       disabled: true
+
+# AWS S3
+cloud:
+  aws:
+    s3:
+      bucket:
+    stack:
+      auto: false
+    region:
+      static:
+    credentials:
+      accessKey:
+      secretKey:
