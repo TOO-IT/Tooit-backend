@@ -1,18 +1,17 @@
 package com.kr.tooit.domain.user.service;
 
-import java.util.Optional;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import com.kr.tooit.domain.user.dto.UserInfoDto;
+import com.kr.tooit.domain.user.domain.User;
+import com.kr.tooit.global.error.CustomException;
+import com.kr.tooit.global.error.ErrorCode;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.kr.tooit.domain.user.domain.User;
-import com.kr.tooit.domain.user.dto.UserInfoDto;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -60,15 +59,22 @@ public class UserService {
 
         String newNickname = request.getNickname();
         if(findUser.isEmpty()) {
-            throw new IllegalArgumentException("Unexpected user");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         if(newNickname.length() > 15 || newNickname.isEmpty()) {
-            throw new DataIntegrityViolationException("닉네임은 15글자 이하로 작성해주세요.");
+            throw new CustomException(ErrorCode.BAD_NICKNAME);
         }
 
         if (newNickname == findUser.get().getNickname()) {
             return request;
+        }
+
+        // 닉네임 중복체크
+        boolean flag = dupCheckNickname(request.getNickname());
+
+        if(flag) {
+            throw new CustomException(ErrorCode.HAS_NICKNAME);
         }
 
         findUser.get().updateNickname(newNickname);
@@ -77,6 +83,20 @@ public class UserService {
             findUser.get().getEmail(), findUser.get().getNickname());
         return updateUserInfo;
     }
+
+
+
+    /**
+     * 사용자 닉네임 중복체크
+     * @param nickname
+     * @return boolean
+     */
+    public boolean dupCheckNickname(String nickname) {
+        Optional<User> findUser = userRepository.findByNickname(nickname);
+
+        if(findUser.isEmpty()) return false;
+
+        return true;
 
     /**
      * 현재 로그인한 사용자 정보 가져오기
