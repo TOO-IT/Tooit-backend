@@ -31,7 +31,7 @@ public class VoteService {
     private final VoteItemRepository voteItemRepository;
     private final UserService userService;
 
-    
+
     public List<VoteListResponse> getList(String order) {
         List<Vote> findList = null;
 
@@ -99,5 +99,13 @@ public class VoteService {
                 .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
 
         findVote.deleteUpdate();
+    }
+
+    @Transactional
+    public void deadline(Long id) {
+        Vote findVote = voteRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
+
+        findVote.deadlineUpdate();
     }
 }

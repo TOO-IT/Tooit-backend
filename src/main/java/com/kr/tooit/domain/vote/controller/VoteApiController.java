@@ -58,4 +58,10 @@ public class VoteApiController {
         voteService.delete(id);
         return ResponseEntity.ok(id);
     }
+
+    @PutMapping("/deadline/{id}")
+    public ResponseEntity deadline(@PathVariable("id") Long id) {
+        voteService.deadline(id);
+        return ResponseEntity.ok(id);
+    }
 }
