@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
+import com.kr.tooit.domain.voteItem.domain.VoteItemResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,11 +17,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -100,20 +101,13 @@ public class Vote {
     }
 
     public VoteListResponse toEntity() {
-        return new VoteListResponse(id, title, content, dDay, endDate, items, voteCount);
+        List<VoteItemResponse> list = items.stream().map(item -> new VoteItemResponse(item)).collect(Collectors.toList());
+        return new VoteListResponse(id, title, content, dDay, endDate, list, voteCount);
     }
 
     public void update(String content, String endDate) {
         this.content = content;
         this.endDate = endDate;
-    }
-
-    public int getDDay(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateTimeStart = LocalDateTime.parse(startDate, formatter);
-        LocalDateTime dateTimeEnd = LocalDateTime.parse(endDate, formatter);
-
-        return (int) Duration.between(dateTimeStart, dateTimeEnd).toDays();
     }
 
     @PrePersist

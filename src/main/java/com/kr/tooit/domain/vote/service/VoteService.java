@@ -53,6 +53,9 @@ public class VoteService {
     @Transactional
     public VoteResponse save(VoteRequest request) {
         User user = userService.getCurrentUser();
+
+        if(user == null) new CustomException(ErrorCode.USER_NOT_FOUND);
+
         request.setUser(user);
         Vote vote = request.toEntity();
 
@@ -60,7 +63,8 @@ public class VoteService {
 
         Vote entity = voteRepository.save(vote);
         items.stream().forEach(i -> i.setVote(entity));
-        List<VoteItem> result = voteItemRepository.saveAll(items);
+
+        voteItemRepository.saveAll(items);
 
         VoteResponse response = new VoteResponse(entity);
 

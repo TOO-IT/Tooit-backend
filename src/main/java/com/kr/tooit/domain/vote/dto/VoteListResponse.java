@@ -2,6 +2,7 @@ package com.kr.tooit.domain.vote.dto;
 
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
+import com.kr.tooit.domain.voteItem.domain.VoteItemResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,7 +24,7 @@ public class VoteListResponse {
     private String content;
     private int dDay;
     private String endDate;
-    private List<VoteItem> items = new ArrayList<>();
+    private List<VoteItemResponse> items = new ArrayList<>();
 
     private int voteCount;
 
@@ -31,7 +33,7 @@ public class VoteListResponse {
         this.title = entity.getTitle();
         this.dDay = entity.getDDay();
         this.endDate = entity.getEndDate();
-        this.items = entity.getItems();
+        this.items = entity.getItems().stream().map(item -> new VoteItemResponse(item)).collect(Collectors.toList());
         this.voteCount = entity.getVoteCount();
     }
 }
