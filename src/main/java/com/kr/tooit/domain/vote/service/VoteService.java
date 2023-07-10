@@ -15,11 +15,11 @@ import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,15 +31,24 @@ public class VoteService {
     private final VoteItemRepository voteItemRepository;
     private final UserService userService;
 
+    
     public List<VoteListResponse> getList(String order) {
         List<Vote> findList = null;
 
+        String shareTarget = "A";
+        String deleteStatus = "N";
+        String deadlineStatus = "N";
+
+        Specification<Vote> spec = Specification.where(VoteSpecification.equalsDeadlineStatus(deadlineStatus))
+                .and(VoteSpecification.equalsDeleteStatus(deleteStatus)
+                        .and(VoteSpecification.equalsShareTarget(shareTarget)));
+
         if(order == null) {
-            findList = voteRepository.findAll();
+            findList = voteRepository.findAll(spec);
         }
         else {
             if(order.equals("popularity"))
-            findList = voteRepository.findAll(Sort.by(Sort.Direction.DESC, "voteCount"));
+                findList = voteRepository.findAll(spec, Sort.by(Sort.Direction.DESC, "voteCount"));
         }
 
         List<VoteListResponse> list = findList.stream()
