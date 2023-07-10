@@ -3,6 +3,7 @@ package com.kr.tooit.domain.vote.controller;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
 import com.kr.tooit.domain.vote.dto.VoteRequest;
 import com.kr.tooit.domain.vote.dto.VoteResponse;
+import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
 import com.kr.tooit.domain.vote.service.VoteService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class VoteApiController {
     /**
      * Vote List 조회
      * @param order (null : 최신순, popularity : 인기순)
-     * @return
+     * @return ResponseEntity<List<VoteListResponse>>
      */
     @GetMapping("")
     public ResponseEntity<List<VoteListResponse>> getList(@RequestParam(value = "order", required = false) String order) {
@@ -31,16 +32,24 @@ public class VoteApiController {
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * Vote Save
+     * @param request
+     * @return ResponseEntity<VoteResponse>
+     */
     @PostMapping("/write")
-    public ResponseEntity<VoteResponse> save(@RequestBody @NotNull VoteRequest request, Principal principal) {
+    public ResponseEntity<VoteResponse> save(@RequestBody @NotNull VoteRequest request) {
         //ResponseEntity<VoteResponse> result = voteService.save(request);
-        VoteResponse res = voteService.save(request, principal);
+        VoteResponse res = voteService.save(request);
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "test";
+    @PutMapping("/{id}")
+    public ResponseEntity<VoteResponse> update(@RequestBody @NotNull VoteUpdateRequest request,
+                                               @PathVariable("id") Long id) {
+        VoteResponse res = voteService.update(id, request);
+
+        return ResponseEntity.ok(res);
     }
 
 }

@@ -2,22 +2,24 @@ package com.kr.tooit.domain.vote.service;
 
 
 import com.kr.tooit.domain.user.domain.User;
-import com.kr.tooit.domain.user.service.UserRepository;
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
 import com.kr.tooit.domain.vote.dto.VoteRequest;
 import com.kr.tooit.domain.vote.dto.VoteResponse;
+import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import com.kr.tooit.domain.voteItem.domain.repository.VoteItemRepository;
+import com.kr.tooit.global.error.CustomException;
+import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,8 +27,6 @@ import java.util.stream.Collectors;
 public class VoteService {
 
     private final VoteRepository voteRepository;
-
-    private final UserRepository userRepository;
 
     private final VoteItemRepository voteItemRepository;
     private final UserService userService;
@@ -49,11 +49,11 @@ public class VoteService {
     }
 
 
+
     @Transactional
-    public VoteResponse save(VoteRequest request, Principal principal) {
+    public VoteResponse save(VoteRequest request) {
         User user = userService.getCurrentUser();
         request.setUser(user);
-        //request.getItems().stream().map(entity -> entity.setVote(request.toEntity())).collect(Collectors.toList());
         Vote vote = request.toEntity();
 
         List<VoteItem> items = vote.getItems();
@@ -62,13 +62,20 @@ public class VoteService {
         items.stream().forEach(i -> i.setVote(entity));
         List<VoteItem> result = voteItemRepository.saveAll(items);
 
-
-
-
         VoteResponse response = new VoteResponse(entity);
 
         return response;
     }
 
+    @Transactional
+    public VoteResponse update(Long id, VoteUpdateRequest request) {
+        Vote findVote = voteRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
 
+        findVote.update(request.getContent(), request.getEndDate());
+
+        VoteResponse response = new VoteResponse(findVote);
+
+        return response;
+    }
 }
