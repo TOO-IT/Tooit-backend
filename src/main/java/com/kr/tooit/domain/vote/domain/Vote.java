@@ -121,6 +121,10 @@ public class Vote {
         return (int) Duration.between(dateTimeStart, dateTimeEnd).toDays();
     }
 
+    public void deleteUpdate() {
+        this.deleteStatus = "Y";
+    }
+
     @PrePersist
     void onPrePersist() {
         this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

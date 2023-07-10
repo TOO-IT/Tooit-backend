@@ -7,6 +7,7 @@ import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
 import com.kr.tooit.domain.vote.service.VoteService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,4 +53,9 @@ public class VoteApiController {
         return ResponseEntity.ok(res);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        voteService.delete(id);
+        return ResponseEntity.ok(id);
+    }
 }

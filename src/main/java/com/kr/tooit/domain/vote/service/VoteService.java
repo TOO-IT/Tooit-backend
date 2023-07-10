@@ -82,4 +82,13 @@ public class VoteService {
 
         return response;
     }
+
+    @Transactional
+    public void delete(Long id) {
+
+        Vote findVote = voteRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
+
+        findVote.deleteUpdate();
+    }
 }
