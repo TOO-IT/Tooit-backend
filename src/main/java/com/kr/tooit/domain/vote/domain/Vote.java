@@ -17,6 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -108,6 +109,16 @@ public class Vote {
     public void update(String content, String endDate) {
         this.content = content;
         this.endDate = endDate;
+
+        this.dDay = getDDay(this.startDate, endDate);
+    }
+
+    public int getDDay(String startDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTimeStart = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime dateTimeEnd = LocalDateTime.parse(endDate, formatter);
+
+        return (int) Duration.between(dateTimeStart, dateTimeEnd).toDays();
     }
 
     @PrePersist
