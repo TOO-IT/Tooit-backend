@@ -97,7 +97,6 @@ public class UserService {
         if (findUser.isEmpty()) return false;
 
         return true;
-
     }
 
     /**
