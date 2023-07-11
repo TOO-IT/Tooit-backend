@@ -5,8 +5,8 @@ import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
-import com.kr.tooit.domain.vote.dto.VoteRequest;
-import com.kr.tooit.domain.vote.dto.VoteResponse;
+import com.kr.tooit.domain.vote.dto.VoteSaveRequest;
+import com.kr.tooit.domain.vote.dto.VoteDetailResponse;
 import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import com.kr.tooit.domain.voteItem.domain.repository.VoteItemRepository;
@@ -60,34 +60,29 @@ public class VoteService {
 
 
     @Transactional
-    public VoteResponse save(VoteRequest request) {
+    public VoteDetailResponse save(VoteSaveRequest request) {
         User user = userService.getCurrentUser();
 
         if(user == null) new CustomException(ErrorCode.USER_NOT_FOUND);
-
         request.setUser(user);
         Vote vote = request.toEntity();
-
-        List<VoteItem> items = vote.getItems();
-
+        List<VoteItem> items = request.getItems().stream().map(voteItemRequest -> voteItemRequest.toEntity()).collect(Collectors.toList());
+        items.stream().forEach(entity -> entity.setVote(vote));
+        items.stream().forEach(entity-> vote.addItem(entity));
         Vote entity = voteRepository.save(vote);
-        items.stream().forEach(i -> i.setVote(entity));
 
-        voteItemRepository.saveAll(items);
-
-        VoteResponse response = new VoteResponse(entity);
-
+        VoteDetailResponse response = new VoteDetailResponse(entity);
         return response;
     }
 
     @Transactional
-    public VoteResponse update(Long id, VoteUpdateRequest request) {
+    public VoteDetailResponse update(Long id, VoteUpdateRequest request) {
         Vote findVote = voteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
 
         findVote.update(request.getContent(), request.getEndDate());
 
-        VoteResponse response = new VoteResponse(findVote);
+        VoteDetailResponse response = new VoteDetailResponse(findVote);
 
         return response;
     }
