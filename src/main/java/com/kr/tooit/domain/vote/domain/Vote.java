@@ -89,7 +89,7 @@ public class Vote {
 
     @Builder
     public Vote(String title, String content, String startDate, String endDate,
-                String shareTarget, int dDay, User user, List<VoteItem> items) {
+                String shareTarget, int dDay, User user) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -97,8 +97,6 @@ public class Vote {
         this.shareTarget = shareTarget;
         this.dDay = dDay;
         this.user = user;
-        this.items = items;
-        this.voteCount = items.stream().mapToInt(VoteItem::getStickerCount).sum();
     }
 
     public VoteListResponse toEntity() {

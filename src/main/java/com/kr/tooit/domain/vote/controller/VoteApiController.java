@@ -1,18 +1,15 @@
 package com.kr.tooit.domain.vote.controller;
 
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
-import com.kr.tooit.domain.vote.dto.VoteRequest;
-import com.kr.tooit.domain.vote.dto.VoteResponse;
+import com.kr.tooit.domain.vote.dto.VoteSaveRequest;
+import com.kr.tooit.domain.vote.dto.VoteDetailResponse;
 import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
 import com.kr.tooit.domain.vote.service.VoteService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -39,16 +36,16 @@ public class VoteApiController {
      * @return ResponseEntity<VoteResponse>
      */
     @PostMapping("/write")
-    public ResponseEntity<VoteResponse> save(@RequestBody @NotNull VoteRequest request) {
+    public ResponseEntity<VoteDetailResponse> save(@RequestBody @NotNull VoteSaveRequest request) {
         //ResponseEntity<VoteResponse> result = voteService.save(request);
-        VoteResponse res = voteService.save(request);
+        VoteDetailResponse res = voteService.save(request);
         return ResponseEntity.ok(res);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VoteResponse> update(@RequestBody @NotNull VoteUpdateRequest request,
-                                               @PathVariable("id") Long id) {
-        VoteResponse res = voteService.update(id, request);
+    public ResponseEntity<VoteDetailResponse> update(@RequestBody @NotNull VoteUpdateRequest request,
+                                                     @PathVariable("id") Long id) {
+        VoteDetailResponse res = voteService.update(id, request);
 
         return ResponseEntity.ok(res);
     }

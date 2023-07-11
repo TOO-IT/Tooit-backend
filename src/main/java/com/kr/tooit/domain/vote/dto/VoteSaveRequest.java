@@ -2,21 +2,16 @@ package com.kr.tooit.domain.vote.dto;
 
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.domain.Vote;
-import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import com.kr.tooit.domain.voteItem.domain.VoteItemRequest;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Data
-public class VoteRequest {
+public class VoteSaveRequest {
 
     private String title;
     private String content;
@@ -29,21 +24,7 @@ public class VoteRequest {
     private User user;
 
 
-//    @Builder
-//    public VoteRequest(String title, String content, LocalDateTime startDate, LocalDateTime endDate
-//                    ,String shareTarget, List<VoteItem> items) {
-//
-//        this.title = title;
-//        this.content = content;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.shareTarget = shareTarget;
-//        this.items = items;
-//
-//    }
-
     public Vote toEntity() {
-
         return Vote.builder()
                 .title(title)
                 .content(content)
@@ -51,7 +32,8 @@ public class VoteRequest {
                 .endDate(endDate)
                 .shareTarget(shareTarget)
                 .dDay(getDDay(startDate, endDate))
-                .items(items.stream().map(VoteItemRequest::toEntity).collect(Collectors.toList()))
+                //.items(items.stream().map(VoteItemRequest::toEntity).collect(Collectors.toList()))
+                //.items(items)
                 .user(user)
                 .build();
     }
