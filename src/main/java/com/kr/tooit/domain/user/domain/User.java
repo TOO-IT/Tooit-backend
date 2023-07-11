@@ -1,5 +1,6 @@
 package com.kr.tooit.domain.user.domain;
 
+import com.kr.tooit.domain.vote.domain.Vote;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -36,8 +39,8 @@ public class User{
     @Column(nullable = false)
     private Role role;
 
-//    @OneToMany(mappedBy = "user")
-//    List<Vote> votes = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<Vote> votes = new ArrayList<>();
 
 
     //OAuth2
