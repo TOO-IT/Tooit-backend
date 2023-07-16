@@ -4,21 +4,14 @@ package com.kr.tooit.domain.vote.service;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.domain.Vote;
-import com.kr.tooit.domain.vote.dto.VoteListResponse;
-import com.kr.tooit.domain.vote.dto.VoteSaveRequest;
-import com.kr.tooit.domain.vote.dto.VoteDetailResponse;
-import com.kr.tooit.domain.vote.dto.VoteUpdateRequest;
+import com.kr.tooit.domain.vote.dto.*;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
-import com.kr.tooit.domain.voteItem.domain.repository.VoteItemRepository;
 import com.kr.tooit.global.error.CustomException;
 import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,38 +20,71 @@ import java.util.stream.Collectors;
 public class VoteService {
 
     private final VoteRepository voteRepository;
-
-    private final VoteItemRepository voteItemRepository;
     private final UserService userService;
+    private final VoteRepositoryPage voteRepositoryPage;
 
+    /**
+     * Vote 리스트 조회 (최신순, 인기순)
+     * 무한스크롤 구현
+     * @param order
+     * @param lastVoteId
+     * @param size
+     * @param page
+     * @return
+     */
+    public VoteSliceResponse getList(String order, Long lastVoteId, int size, int page) {
 
-    public List<VoteListResponse> getList(String order) {
         List<Vote> findList = null;
-
-        String shareTarget = "A";
-        String deleteStatus = "N";
-        String deadlineStatus = "N";
-
-        Specification<Vote> spec = Specification.where(VoteSpecification.equalsDeadlineStatus(deadlineStatus))
-                .and(VoteSpecification.equalsDeleteStatus(deleteStatus)
-                        .and(VoteSpecification.equalsShareTarget(shareTarget)));
+        Pageable pageable = null;
 
         if(order == null) {
-            findList = voteRepository.findAll(spec);
+            order = "newest";
+        }
+
+        if(order.equals("newest")) {
+            pageable = PageRequest.of(0, size);
+            findList = voteRepositoryPage.getSlice(lastVoteId, pageable);
         }
         else {
-            if(order.equals("popularity"))
-                findList = voteRepository.findAll(spec, Sort.by(Sort.Direction.DESC, "voteCount"));
+            if(order.equals("popularity")) {
+                pageable = PageRequest.of(page, size);
+                findList = voteRepositoryPage.getSliceOrderByVoteCount(pageable);
+            }
         }
 
         List<VoteListResponse> list = findList.stream()
                 .map(Vote::toEntity)
                 .collect(Collectors.toList());
-        return list;
+
+        Slice<VoteListResponse> voteListResponses = checkLastPage(pageable, list);
+
+        VoteSliceResponse res = new VoteSliceResponse(voteListResponses.hasNext(), list);
+
+        return res;
     }
 
+    /**
+     * Vote 리스트 조회 페이징 hasNext 판별
+     * @param pageable
+     * @param list
+     * @return
+     */
+    private Slice<VoteListResponse> checkLastPage(Pageable pageable, List<VoteListResponse> list) {
+        boolean hasNext = false;
 
+        if(list.size() > pageable.getPageSize()) {
+            hasNext = true;
+            list.remove(pageable.getPageSize());
+        }
 
+        return new SliceImpl<>(list, pageable, hasNext);
+    }
+
+    /**
+     * Vote 게시글 저장
+     * @param request
+     * @return
+     */
     @Transactional
     public VoteDetailResponse save(VoteSaveRequest request) {
         User user = userService.getCurrentUser();
@@ -68,13 +94,18 @@ public class VoteService {
         Vote vote = request.toEntity();
         List<VoteItem> items = request.getItems().stream().map(voteItemRequest -> voteItemRequest.toEntity()).collect(Collectors.toList());
         items.stream().forEach(entity -> entity.setVote(vote));
-        items.stream().forEach(entity-> vote.addItem(entity));
         Vote entity = voteRepository.save(vote);
 
         VoteDetailResponse response = new VoteDetailResponse(entity);
         return response;
     }
 
+    /**
+     * Vote 게시글 수정
+     * @param id
+     * @param request
+     * @return
+     */
     @Transactional
     public VoteDetailResponse update(Long id, VoteUpdateRequest request) {
         Vote findVote = voteRepository.findById(id)
@@ -87,15 +118,23 @@ public class VoteService {
         return response;
     }
 
+
+    /**
+     * Vote 게시글 삭제
+     * @param id
+     */
     @Transactional
     public void delete(Long id) {
 
         Vote findVote = voteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
-
         findVote.deleteUpdate();
     }
 
+    /**
+     * Vote 게시글 마감 처리
+     * @param id
+     */
     @Transactional
     public void deadline(Long id) {
         Vote findVote = voteRepository.findById(id)
