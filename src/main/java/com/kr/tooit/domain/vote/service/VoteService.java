@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,25 +122,31 @@ public class VoteService {
 
     /**
      * Vote 게시글 삭제
-     * @param id
+     * @param list
      */
     @Transactional
-    public void delete(Long id) {
+    public void delete(VoteIdListRequest list) {
 
-        Vote findVote = voteRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
-        findVote.deleteUpdate();
+        List<Long> ids = list.getId();
+
+        for(Long id : ids) {
+            Optional<Vote> findVote = voteRepository.findById(id);
+            findVote.get().deleteUpdate();
+        }
     }
 
     /**
      * Vote 게시글 마감 처리
-     * @param id
+     * @param list
      */
     @Transactional
-    public void deadline(Long id) {
-        Vote findVote = voteRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
+    public void deadline(VoteIdListRequest list) {
 
-        findVote.deadlineUpdate();
+        List<Long> ids = list.getId();
+
+        for(Long id : ids) {
+            Optional<Vote> findVote = voteRepository.findById(id);
+            findVote.get().deadlineUpdate();
+        }
     }
 }

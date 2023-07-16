@@ -60,23 +60,23 @@ public class VoteApiController {
 
     /**
      * Vote 게시글 삭제
-     * @param id
+     * @param list
      * @return
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
-        voteService.delete(id);
-        return ResponseEntity.ok(id);
+    @DeleteMapping("/")
+    public ResponseEntity delete(@RequestBody VoteIdListRequest list) {
+        voteService.delete(list);
+        return ResponseEntity.ok(list);
     }
 
     /**
      * Vote 게시글 마감 처리
-     * @param id
+     * @param list
      * @return
      */
-    @PutMapping("/deadline/{id}")
-    public ResponseEntity deadline(@PathVariable("id") Long id) {
-        voteService.deadline(id);
-        return ResponseEntity.ok(id);
+    @PutMapping("/deadline")
+    public ResponseEntity deadline(@RequestBody VoteIdListRequest list) {
+        voteService.deadline(list);
+        return ResponseEntity.ok(list);
     }
 }
