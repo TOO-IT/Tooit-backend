@@ -132,6 +132,10 @@ public class Vote {
         this.deadlineStatus = "Y";
     }
 
+    public void updateReview(Review review) {
+        this.review = review;
+    }
+
     @PrePersist
     void onPrePersist() {
         this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
