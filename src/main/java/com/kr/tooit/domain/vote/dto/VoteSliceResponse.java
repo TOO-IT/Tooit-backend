@@ -13,9 +13,9 @@ import java.util.List;
 public class VoteSliceResponse {
 
     private boolean nextPage;
-    private List<VoteListResponse> list;
+    private List<?> list;
 
-    public VoteSliceResponse(boolean nextPage, List<VoteListResponse> list) {
+    public VoteSliceResponse(boolean nextPage, List<?> list) {
         this.nextPage = nextPage;
         this.list = list;
     }

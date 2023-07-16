@@ -53,6 +53,21 @@ public class VoteRepositoryPage {
         return  results;
     }
 
+    public List<Vote> getSliceMyVotes(Long id, Pageable pageable) {
+        QVote vote = new QVote("v");
+        List<Vote> results = queryFactory.selectFrom(vote)
+                .where(
+                        vote.deadlineStatus.eq("N"),
+                        vote.deleteStatus.eq("N"),
+                        vote.shareTarget.eq("A"),
+                        vote.user.id.eq(id)
+                )
+                .orderBy(vote.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+        return results;
+    }
+
     private BooleanExpression ltVoteId(QVote vote, Long voteId) {
         if (voteId == null) {
             return null;
@@ -60,4 +75,6 @@ public class VoteRepositoryPage {
 
         return vote.id.lt(voteId);
     }
+
+
 }

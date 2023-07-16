@@ -149,4 +149,29 @@ public class VoteService {
             findVote.get().deadlineUpdate();
         }
     }
+
+    public VoteSliceResponse getMyVotes(Long id, int size, Long lastVoteId) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        List<Vote> list = voteRepositoryPage.getSliceMyVotes(id, pageable);
+
+        List<VoteMyVoteListResponse> result = list.stream().map(entity -> new VoteMyVoteListResponse(entity)).collect(Collectors.toList());
+
+        Slice<VoteMyVoteListResponse> voteListResponses = checkMyLastPage(pageable, result);
+
+        VoteSliceResponse res = new VoteSliceResponse(voteListResponses.hasNext(), result);
+
+        return res;
+    }
+
+    private Slice<VoteMyVoteListResponse> checkMyLastPage(Pageable pageable, List<VoteMyVoteListResponse> list) {
+        boolean hasNext = false;
+
+        if(list.size() > pageable.getPageSize()) {
+            hasNext = true;
+            list.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(list, pageable, hasNext);
+    }
 }

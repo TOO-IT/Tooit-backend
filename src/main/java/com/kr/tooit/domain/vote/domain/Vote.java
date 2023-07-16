@@ -2,6 +2,7 @@ package com.kr.tooit.domain.vote.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kr.tooit.domain.review.domain.Review;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
@@ -86,6 +87,10 @@ public class Vote {
 
     @ColumnDefault("0")
     private int voteCount;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Review review;
 
     @Builder
     public Vote(String title, String content, String startDate, String endDate,

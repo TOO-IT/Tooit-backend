@@ -40,6 +40,8 @@ public class QVote extends EntityPathBase<Vote> {
 
     public final StringPath modifiedDate = createString("modifiedDate");
 
+    public final com.kr.tooit.domain.review.domain.QReview review;
+
     public final StringPath shareTarget = createString("shareTarget");
 
     public final StringPath startDate = createString("startDate");
@@ -68,6 +70,7 @@ public class QVote extends EntityPathBase<Vote> {
 
     public QVote(Class<? extends Vote> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.review = inits.isInitialized("review") ? new com.kr.tooit.domain.review.domain.QReview(forProperty("review")) : null;
         this.user = inits.isInitialized("user") ? new com.kr.tooit.domain.user.domain.QUser(forProperty("user")) : null;
     }
 
