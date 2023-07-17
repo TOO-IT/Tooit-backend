@@ -3,6 +3,8 @@ package com.kr.tooit.domain.user.controller;
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
 import com.kr.tooit.domain.user.service.UserService;
+import com.kr.tooit.domain.vote.dto.VoteSliceResponse;
+import com.kr.tooit.domain.vote.service.VoteService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserApiController {
 
     private final UserService userService;
+    private final VoteService voteService;
 
     /**
      * 로그인 되어 있는 User 정보 조회
@@ -39,5 +42,14 @@ public class UserApiController {
     public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserInfoDto request) {
         UserInfoDto response = userService.updateNickname(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/myPage/vote/{userId}")
+    public ResponseEntity<VoteSliceResponse> getMyVotes(@PathVariable("userId") Long id,
+                                                        @RequestParam(value = "size", defaultValue = "10") int size,
+                                                        @RequestParam(value = "lastVoteId", defaultValue = "0") Long lastVoteId
+    ) {
+        VoteSliceResponse result = voteService.getMyVotes(id, size, lastVoteId);
+        return ResponseEntity.ok(result);
     }
 }

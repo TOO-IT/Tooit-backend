@@ -10,8 +10,12 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
     HAS_NICKNAME(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "중복된 닉네임입니다."),
-    BAD_NICKNAME(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "올바르지 않은 닉네임입니다. 닉네임은 1~15자 이하로 작성해주세요.")
+    BAD_NICKNAME(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "올바르지 않은 닉네임입니다. 닉네임은 1~15자 이하로 작성해주세요."),
 
+    VOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "VOTE-001", "투표 게시글을 찾을 수 없습니다."),
+
+
+    HAS_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW-001", "이미 소감이 작성된 게시글입니다.")
     ;
 
 
