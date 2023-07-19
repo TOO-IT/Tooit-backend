@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -37,10 +39,17 @@ public class VoteApiController {
      * @param request
      * @return ResponseEntity<VoteResponse>
      */
+//    @PostMapping("/write")
+//    public ResponseEntity<VoteDetailResponse> save(@RequestBody @NotNull VoteSaveRequest request) {
+//        //ResponseEntity<VoteResponse> result = voteService.save(request);
+//        VoteDetailResponse res = voteService.save(request);
+//        return ResponseEntity.ok(res);
+//    }
     @PostMapping("/write")
-    public ResponseEntity<VoteDetailResponse> save(@RequestBody @NotNull VoteSaveRequest request) {
+    public ResponseEntity<VoteDetailResponse> save(@RequestPart(value = "vote", required = true) VoteSaveRequest request,
+                                                   @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile) throws IOException {
         //ResponseEntity<VoteResponse> result = voteService.save(request);
-        VoteDetailResponse res = voteService.save(request);
+        VoteDetailResponse res = voteService.save(multipartFile, request);
         return ResponseEntity.ok(res);
     }
 

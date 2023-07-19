@@ -6,7 +6,7 @@ import com.kr.tooit.domain.review.domain.Review;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
-import com.kr.tooit.domain.voteItem.domain.VoteItemResponse;
+import com.kr.tooit.domain.voteItem.dto.VoteItemResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

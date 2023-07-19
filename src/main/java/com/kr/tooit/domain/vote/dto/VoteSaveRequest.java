@@ -2,7 +2,7 @@ package com.kr.tooit.domain.vote.dto;
 
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.domain.Vote;
-import com.kr.tooit.domain.voteItem.domain.VoteItemRequest;
+import com.kr.tooit.domain.voteItem.dto.VoteItemRequest;
 import lombok.Data;
 
 import java.time.Duration;

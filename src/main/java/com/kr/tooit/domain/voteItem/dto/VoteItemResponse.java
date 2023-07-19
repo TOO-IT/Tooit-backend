@@ -1,5 +1,6 @@
-package com.kr.tooit.domain.voteItem.domain;
+package com.kr.tooit.domain.voteItem.dto;
 
+import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -29,7 +29,6 @@ public class VoteItem {
 
     private String content;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")
     private Vote vote;

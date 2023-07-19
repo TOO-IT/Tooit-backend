@@ -1,4 +1,4 @@
-package com.kr.tooit.domain.voteItem.domain.repository;
+package com.kr.tooit.domain.voteItem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
