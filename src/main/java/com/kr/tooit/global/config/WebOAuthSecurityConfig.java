@@ -55,9 +55,9 @@ public class WebOAuthSecurityConfig {
 
         // 토큰 재발급 URL은 인증 없이 접근 가능하도록 설정. 나머지 API URL은 인증 필요
         http.authorizeHttpRequests((authReq)
-                -> authReq.requestMatchers("/tooit","/api/token", "/login/**",
+                -> authReq.requestMatchers("/api/token", "/login/**",
                         "/oauth2/authorization/**", "/js/**","/favicon.ico", "/tooit-api.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/tooit/**").authenticated()
+                .requestMatchers("/tooit/vote/write").authenticated()
                 .anyRequest().permitAll());
 
         http.oauth2Login((login) -> login.loginPage("/login")
