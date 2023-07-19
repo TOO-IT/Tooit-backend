@@ -1,4 +1,4 @@
-package com.kr.tooit.domain.voteItem.domain.service;
+package com.kr.tooit.domain.voteItem.service;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -12,7 +12,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kr.tooit.domain.voteItem.domain.VoteImage;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
-import com.kr.tooit.domain.voteItem.domain.repository.VoteItemRepository;
+import com.kr.tooit.domain.voteItem.repository.VoteItemRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

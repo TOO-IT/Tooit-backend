@@ -1,11 +1,13 @@
 package com.kr.tooit.domain.voteItem.domain;
 
+import com.kr.tooit.domain.vote.domain.Vote;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Fetch;
 
 @Getter
 @Table(name = "ITEM")
@@ -27,12 +29,28 @@ public class VoteItem {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote_id")
+    private Vote vote;
 
     @Builder
-    public VoteItem(String image, int stickerCount, String name, String content) {
+    public VoteItem(String image, int stickerCount, String name, String content, Vote vote) {
         this.image = image;
         this.stickerCount = stickerCount;
         this.name = name;
         this.content = content;
+        //this.vote = vote;
+    }
+
+    public void setVote(final Vote vote) {
+        if(this.vote != null) {
+            this.vote.getItems().remove(this);
+        }
+        this.vote = vote;
+
+        if(!vote.getItems().contains(this)) {
+            //vote.getItems().add(this);
+            vote.addItem(this);
+        }
     }
 }
