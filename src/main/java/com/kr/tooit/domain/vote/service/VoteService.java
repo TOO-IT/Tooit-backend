@@ -6,12 +6,18 @@ import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.vote.dto.*;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
+import com.kr.tooit.domain.voteItem.dto.VoteItemRequest;
+import com.kr.tooit.domain.voteItem.service.VoteItemService;
 import com.kr.tooit.global.error.CustomException;
 import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +29,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserService userService;
     private final VoteRepositoryPage voteRepositoryPage;
+    private final VoteItemService voteItemService;
 
     /**
      * Vote 리스트 조회 (최신순, 인기순)
@@ -87,14 +94,29 @@ public class VoteService {
      * @return
      */
     @Transactional
-    public VoteDetailResponse save(VoteSaveRequest request) {
+    public VoteDetailResponse save(List<MultipartFile> multipartFile, VoteSaveRequest request) throws IOException {
         User user = userService.getCurrentUser();
 
         if(user == null) new CustomException(ErrorCode.USER_NOT_FOUND);
         request.setUser(user);
+
+        List<VoteItem> items = new ArrayList<>();
+
+        for(int i = 0; i < request.getItems().size(); i++) {
+            VoteItemRequest item = request.getItems().get(i);
+            VoteItem buildItem = VoteItem.builder()
+                    .image(voteItemService.uploadFile(multipartFile.get(i)))
+                    .stickerCount(item.getStickerCount())
+                    .name(item.getName())
+                    .content(item.getContent())
+                    .build();
+
+            items.add(buildItem);
+        }
+
         Vote vote = request.toEntity();
-        List<VoteItem> items = request.getItems().stream().map(voteItemRequest -> voteItemRequest.toEntity()).collect(Collectors.toList());
         items.stream().forEach(entity -> entity.setVote(vote));
+
         Vote entity = voteRepository.save(vote);
 
         VoteDetailResponse response = new VoteDetailResponse(entity);

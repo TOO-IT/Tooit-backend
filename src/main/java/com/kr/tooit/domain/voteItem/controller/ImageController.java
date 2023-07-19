@@ -1,4 +1,4 @@
-package com.kr.tooit.domain.voteItem.domain.controller;
+package com.kr.tooit.domain.voteItem.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.voteItem.domain.VoteImage;
-import com.kr.tooit.domain.voteItem.domain.service.VoteItemService;
+import com.kr.tooit.domain.voteItem.service.VoteItemService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/upload")
+@RequestMapping("/tooit/upload")
 public class ImageController {
 	private final VoteItemService voteItemService;
 	private final UserService userService;

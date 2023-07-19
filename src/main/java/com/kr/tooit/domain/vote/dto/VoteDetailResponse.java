@@ -1,7 +1,7 @@
 package com.kr.tooit.domain.vote.dto;
 
 import com.kr.tooit.domain.vote.domain.Vote;
-import com.kr.tooit.domain.voteItem.domain.VoteItemResponse;
+import com.kr.tooit.domain.voteItem.dto.VoteItemResponse;
 import lombok.Getter;
 
 import java.util.List;
