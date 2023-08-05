@@ -52,5 +52,4 @@ public class Sticker {
         this.content = content;
         this.annym = annym;
     }
-
 }
