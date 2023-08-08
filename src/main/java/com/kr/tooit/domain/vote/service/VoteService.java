@@ -89,6 +89,18 @@ public class VoteService {
     }
 
     /**
+     * Vote 게시글 단건 조회
+     * @param id
+     * @return
+     */
+    public VoteDetailResponse getVote(Long id) {
+        Vote findVote = voteRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.VOTE_NOT_FOUND));
+
+        return new VoteDetailResponse(findVote);
+    }
+
+    /**
      * Vote 게시글 저장
      * @param request
      * @return
