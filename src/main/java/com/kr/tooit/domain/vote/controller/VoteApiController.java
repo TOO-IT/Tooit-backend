@@ -35,16 +35,22 @@ public class VoteApiController {
     }
 
     /**
+     *  vote 단건 조회
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<VoteDetailResponse> getVote(@PathVariable("id") Long id) {
+        VoteDetailResponse res = voteService.getVote(id);
+        return ResponseEntity.ok(res);
+    }
+
+
+    /**
      * Vote Save
      * @param request
      * @return ResponseEntity<VoteResponse>
      */
-//    @PostMapping("/write")
-//    public ResponseEntity<VoteDetailResponse> save(@RequestBody @NotNull VoteSaveRequest request) {
-//        //ResponseEntity<VoteResponse> result = voteService.save(request);
-//        VoteDetailResponse res = voteService.save(request);
-//        return ResponseEntity.ok(res);
-//    }
     @PostMapping("/write")
     public ResponseEntity<VoteDetailResponse> save(@RequestPart(value = "vote", required = true) VoteSaveRequest request,
                                                    @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile) throws IOException {
