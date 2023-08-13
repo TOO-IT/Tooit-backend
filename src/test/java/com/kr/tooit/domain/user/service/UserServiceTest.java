@@ -80,11 +80,11 @@ class UserServiceTest {
         String changeNickname = oldNick + "12";
         if(changeNickname.length() > 15) changeNickname = "123";
 
-        UserInfoDto oldUserInfo = new UserInfoDto(oldUser.get().getId(), oldUser.get().getEmail(), changeNickname);
+        //UserInfoDto oldUserInfo = new UserInfoDto(oldUser.get().getId(), oldUser.get().getEmail(), changeNickname);
 
 
         // when
-        UserInfoDto updateUser = userService.updateNickname(oldUserInfo);
+        UserInfoDto updateUser = userService.updateNickname("old");
         String newNick = updateUser.getNickname();
 
         // then

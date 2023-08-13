@@ -2,6 +2,7 @@ package com.kr.tooit.domain.user.controller;
 
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
+import com.kr.tooit.domain.user.dto.UserUpdateDto;
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.dto.VoteSliceResponse;
 import com.kr.tooit.domain.vote.service.VoteService;
@@ -39,17 +40,25 @@ public class UserApiController {
      * @return UserInfoDto
      */
     @PutMapping("/nickname")
-    public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserInfoDto request) {
-        UserInfoDto response = userService.updateNickname(request);
+    public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserUpdateDto request) {
+        UserInfoDto response = userService.updateNickname(request.getNickname());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/myPage/vote/{userId}")
-    public ResponseEntity<VoteSliceResponse> getMyVotes(@PathVariable("userId") Long id,
-                                                        @RequestParam(value = "size", defaultValue = "10") int size,
+    /**
+     *  마이페이지 내가 작성한 게시글 조회
+     * @param size
+     * @param lastVoteId
+     * @return
+     */
+    @GetMapping("/myPage/vote")
+    public ResponseEntity<VoteSliceResponse> getMyVotes(@RequestParam(value = "size", defaultValue = "10") int size,
                                                         @RequestParam(value = "lastVoteId", defaultValue = "0") Long lastVoteId
     ) {
-        VoteSliceResponse result = voteService.getMyVotes(id, size, lastVoteId);
+        // 현재 로그인 중인 user Id 가져오기
+        Long currentUserId = userService.getCurrentUserId();
+
+        VoteSliceResponse result = voteService.getMyVotes(currentUserId, size, lastVoteId);
         return ResponseEntity.ok(result);
     }
 }
