@@ -46,6 +46,8 @@ public class QVote extends EntityPathBase<Vote> {
 
     public final StringPath startDate = createString("startDate");
 
+    public final StringPath thumbnail = createString("thumbnail");
+
     public final StringPath title = createString("title");
 
     public final com.kr.tooit.domain.user.domain.QUser user;

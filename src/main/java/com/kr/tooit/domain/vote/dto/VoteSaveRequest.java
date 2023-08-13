@@ -4,6 +4,7 @@ import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.voteItem.dto.VoteItemRequest;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,8 +20,8 @@ public class VoteSaveRequest {
     private String endDate;
     private String shareTarget;
     private int dDay;
+   // private MultipartFile thumbnail;
     private List<VoteItemRequest> items;
-
     private User user;
 
 
@@ -32,8 +33,6 @@ public class VoteSaveRequest {
                 .endDate(endDate)
                 .shareTarget(shareTarget)
                 .dDay(getDDay(startDate, endDate))
-                //.items(items.stream().map(VoteItemRequest::toEntity).collect(Collectors.toList()))
-                //.items(items)
                 .user(user)
                 .build();
     }

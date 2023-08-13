@@ -23,6 +23,8 @@ public class VoteMyVoteListResponse {
     private String topItem;
     private boolean reviewFlag;
 
+    private String thumbnail;
+
     public VoteMyVoteListResponse(Vote entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
@@ -31,6 +33,7 @@ public class VoteMyVoteListResponse {
         this.dDay = entity.getDDay() == 0 ? "D-day" : "D-" + entity.getDDay();
         this.topItem = getTopItem(entity.getItems());
         this.reviewFlag = entity.getReview() == null ? false : true;
+        this.thumbnail = entity.getThumbnail();
     }
 
     public String getTopItem(List<VoteItem> items) {

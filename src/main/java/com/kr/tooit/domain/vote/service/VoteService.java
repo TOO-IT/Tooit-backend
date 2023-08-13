@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class VoteService {
@@ -106,10 +107,11 @@ public class VoteService {
      * @return
      */
     @Transactional
-    public VoteDetailResponse save(List<MultipartFile> multipartFile, VoteSaveRequest request) throws IOException {
+    public VoteDetailResponse save(List<MultipartFile> multipartFile, VoteSaveRequest request, MultipartFile thumbnail) throws IOException {
         User user = userService.getCurrentUser();
 
         if(user == null) new CustomException(ErrorCode.USER_NOT_FOUND);
+
         request.setUser(user);
 
         List<VoteItem> items = new ArrayList<>();
@@ -128,6 +130,8 @@ public class VoteService {
 
         Vote vote = request.toEntity();
         items.stream().forEach(entity -> entity.setVote(vote));
+
+        vote.saveThumbnail(voteItemService.uploadFile(thumbnail));
 
         Vote entity = voteRepository.save(vote);
 

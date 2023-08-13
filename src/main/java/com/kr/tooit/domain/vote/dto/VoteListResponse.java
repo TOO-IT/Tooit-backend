@@ -26,6 +26,8 @@ public class VoteListResponse {
 
     private int voteCount;
 
+    private String thumbnail;
+
     public VoteListResponse(Vote entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
@@ -33,5 +35,6 @@ public class VoteListResponse {
         this.endDate = entity.getEndDate();
         this.items = entity.getItems().stream().map(item -> new VoteItemResponse(item)).collect(Collectors.toList());
         this.voteCount = entity.getVoteCount();
+        this.thumbnail = entity.getThumbnail();
     }
 }
