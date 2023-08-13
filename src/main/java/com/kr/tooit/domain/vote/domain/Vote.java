@@ -17,6 +17,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -43,11 +44,6 @@ public class Vote {
     @Column(nullable = false, length = 50)
     private String content; // 투표 설명
 
-    /**
-     * 이 컬럼은 필요 없을 수도... 일단 Budiler에서 제외
-     */
-//    private String period; // 기간 (시작 날짜 ~ 종료 날짜)
-
     @Column(name = "START_DATE", nullable = false)
     private String startDate; // 시작 날짜
 
@@ -72,9 +68,13 @@ public class Vote {
     @ColumnDefault("'N'")
     private String deleteStatus;
 
-    @Column(name = "DEADLINE_STATUS") // 게시글 투표 마감 여부
-    @ColumnDefault("'N'")
     private String deadlineStatus;
+
+    @ColumnDefault("0")
+    private int voteCount; // 총 투표 수
+
+    @Column(name = "THUMBNAIL")
+    private String thumbnail; // 게시글 썸네일
 
     @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -84,9 +84,6 @@ public class Vote {
     @JsonIgnore
     @JoinColumn(name = "USER_ID")
     private User user;
-
-    @ColumnDefault("0")
-    private int voteCount;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
@@ -106,7 +103,7 @@ public class Vote {
 
     public VoteListResponse toEntity() {
         List<VoteItemResponse> list = items.stream().map(item -> new VoteItemResponse(item)).collect(Collectors.toList());
-        return new VoteListResponse(id, title, content, dDay, endDate, list, voteCount);
+        return new VoteListResponse(id, title, content, dDay, endDate, list, voteCount, thumbnail);
     }
 
     public void update(String content, String endDate) {
@@ -134,6 +131,10 @@ public class Vote {
 
     public void updateReview(Review review) {
         this.review = review;
+    }
+
+    public void saveThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     @PrePersist

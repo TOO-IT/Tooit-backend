@@ -3,6 +3,7 @@ package com.kr.tooit.domain.vote.dto;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.voteItem.dto.VoteItemResponse;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,8 @@ public class VoteDetailResponse {
     private String nickname;
     private List<VoteItemResponse> items;
 
+    private String thumbnail;
+
 
 
 
@@ -36,5 +39,6 @@ public class VoteDetailResponse {
         this.userId = entity.getUser().getId();
         this.nickname = entity.getUser().getNickname();
         this.items = entity.getItems().stream().map(VoteItemResponse::new).collect(Collectors.toList());
+        this.thumbnail = entity.getThumbnail();
     }
 }
