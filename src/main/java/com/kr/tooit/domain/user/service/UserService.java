@@ -50,14 +50,17 @@ public class UserService {
 
     /**
      * 사용자 닉네임 수정
-     * @param request
+     * @param nickname
      * @return UserInfoDto
      */
     @Transactional
-    public UserInfoDto updateNickname(UserInfoDto request) {
-        Optional<User> findUser = userRepository.findById(request.getId());
+    public UserInfoDto updateNickname(String nickname) {
 
-        String newNickname = request.getNickname();
+        Long userId = getCurrentUserId();
+
+        Optional<User> findUser = userRepository.findById(userId);
+
+        String newNickname = nickname;
         if(findUser.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
@@ -66,12 +69,12 @@ public class UserService {
             throw new CustomException(ErrorCode.BAD_NICKNAME);
         }
 
-        if (newNickname == findUser.get().getNickname()) {
-            return request;
+        if (newNickname.equals(findUser.get().getNickname())) {
+            return new UserInfoDto(findUser.get().getId(), findUser.get().getEmail(), findUser.get().getNickname());
         }
 
         // 닉네임 중복체크
-        boolean flag = dupCheckNickname(request.getNickname());
+        boolean flag = dupCheckNickname(newNickname);
 
         if(flag) {
             throw new CustomException(ErrorCode.HAS_NICKNAME);
@@ -81,6 +84,7 @@ public class UserService {
 
         UserInfoDto updateUserInfo = new UserInfoDto(findUser.get().getId(),
             findUser.get().getEmail(), findUser.get().getNickname());
+
         return updateUserInfo;
     }
 
@@ -108,5 +112,16 @@ public class UserService {
         String email = authentication.getName();
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+    }
+
+    /**
+     * 현재 로그인한 사용자 ID 반환
+     * @return userId
+     */
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User findUser = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return findUser.getId();
     }
 }
