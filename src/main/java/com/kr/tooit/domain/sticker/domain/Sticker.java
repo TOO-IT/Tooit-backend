@@ -17,19 +17,19 @@ public class Sticker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "STICKER_ID")
-    private Long id;
+    private Long id; // 번호
 
     @Column(nullable = false)
-    private String image;
+    private String image; // 이미지
 
     @Column(nullable = false)
-    private String location;
+    private String location; // 위치
 
-    private String nickname;
+    private String nickname; // 닉네임
 
-    private String content;
+    private String content; // 설명
 
-    private String annym;
+    private String annym; // 익명여부 ('Y'/'N')
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -45,11 +45,31 @@ public class Sticker {
 
 
     @Builder
-    public Sticker (String image, String location, String nickname, String content, String annym) {
+    public Sticker (String image, String location, String nickname, String content, String annym, User user, VoteItem voteItem) {
+        this.image = image;
+        this.location = location;
+        this.nickname = nickname;
+        this.content = content;
+        this.annym = annym;
+        this.user = user;
+        this.voteItem = voteItem;
+    }
+
+    public void update(String image, String location, String nickname, String content, String annym) {
         this.image = image;
         this.location = location;
         this.nickname = nickname;
         this.content = content;
         this.annym = annym;
     }
+
+    @PrePersist
+    void onPrePersist() {
+        this.annym = "N";
+    }
+
+    @PreUpdate
+    void onPreUpdate() {
+    }
+
 }
