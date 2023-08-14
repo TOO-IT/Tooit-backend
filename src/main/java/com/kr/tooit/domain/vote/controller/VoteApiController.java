@@ -51,10 +51,10 @@ public class VoteApiController {
      * @param request
      * @return ResponseEntity<VoteResponse>
      */
-    @PostMapping("/write")
+    @PostMapping(value = "/write")
     public ResponseEntity<VoteDetailResponse> save(@RequestPart(value = "vote", required = true) VoteSaveRequest request,
                                                    @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile,
-                                                   @RequestParam(value = "thumbnail", required = true) MultipartFile thumbnail) throws IOException {
+                                                   @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) throws IOException {
         VoteDetailResponse res = voteService.save(multipartFile, request, thumbnail);
         return ResponseEntity.ok(res);
     }
