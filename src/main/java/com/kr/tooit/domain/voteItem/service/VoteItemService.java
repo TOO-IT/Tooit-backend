@@ -28,6 +28,9 @@ public class VoteItemService {
 	private String bucket;
 
 	public String uploadFile(MultipartFile multipartFile) throws IOException {
+
+		if(multipartFile.isEmpty()) return "";
+
 		String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
 
 		// 이미지가 있는지 확인하고 Content-Type을 설정
