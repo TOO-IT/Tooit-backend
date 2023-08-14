@@ -188,8 +188,11 @@ public class VoteService {
         }
     }
 
-    public VoteSliceResponse getMyVotes(Long id, int size, Long lastVoteId) {
+    public VoteSliceResponse getMyVotes(String token, int size, Long lastVoteId) {
         Pageable pageable = PageRequest.of(0, size);
+        
+        // token 값으로 userId 구하기
+        Long id = userService.getCurrentUserId(token);
 
         List<Vote> list = voteRepositoryPage.getSliceMyVotes(id, pageable);
 

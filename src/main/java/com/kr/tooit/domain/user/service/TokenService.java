@@ -2,6 +2,8 @@ package com.kr.tooit.domain.user.service;
 
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.global.config.jwt.TokenProvider;
+import com.kr.tooit.global.error.CustomException;
+import com.kr.tooit.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,9 @@ public class TokenService {
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
-    private final UserService userService;
+    private final UserRepository userRepository;
+
+    private final static String TOKEN_PREFIX = "Bearer ";
 
     public String createNewAccessToken(String refreshToken) {
         // 토큰 유효성 검사에 실패하면 예외 발생
@@ -22,8 +26,23 @@ public class TokenService {
         }
 
         Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-        User user = userService.findById(userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return tokenProvider.generateToken(user, Duration.ofHours(2));
+    }
+
+    // Bearer를 제외한 토큰 반환
+    public Long getUserId(String authorizationHeader) {
+        String token = "";
+        if(authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
+            token = authorizationHeader.substring(TOKEN_PREFIX.length());
+        }
+
+        if(!token.isEmpty()) {
+            return tokenProvider.getUserId(token);
+        }
+        return null;
     }
 }
