@@ -7,12 +7,14 @@ import com.kr.tooit.domain.user.dto.CreateAccessTokenRequest;
 import com.kr.tooit.domain.user.dto.UserInfoDto;
 import com.kr.tooit.global.config.jwt.JwtFactory;
 import com.kr.tooit.global.config.jwt.JwtProperties;
+import com.kr.tooit.global.config.jwt.TokenProvider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +28,8 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Autowired
     JwtProperties jwtProperties;
+    @Autowired
+    TokenProvider tokenProvider;
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
@@ -73,18 +77,32 @@ class UserServiceTest {
     public void updateNickname() throws Exception {
 
         // given
-        Long userId = 19L; // DB에 저장되어 있는 userId
+        //Long userId = 19L; // DB에 저장되어 있는 userId
 
-        Optional<User> oldUser = userRepository.findById(userId);
-        String oldNick = oldUser.get().getNickname();
+
+        //given
+        Optional<User> findUser = userRepository.findByEmail("test45@naver.com");
+
+        if(!findUser.isEmpty()) {
+            userRepository.deleteById(findUser.get().getId());
+        }
+
+        User user = userRepository.save(User.builder()
+                .email("test45@naver.com")
+                .nickname("testtest")
+                .provider("naver")
+                .providerId("3223")
+                .role(Role.USER)
+                .build());
+
+        String token = "Bearer " + tokenProvider.generateToken(user, Duration.ofDays(14));
+        
+        String oldNick = user.getNickname();
         String changeNickname = oldNick + "12";
         if(changeNickname.length() > 15) changeNickname = "123";
 
-        //UserInfoDto oldUserInfo = new UserInfoDto(oldUser.get().getId(), oldUser.get().getEmail(), changeNickname);
-
-
         // when
-        UserInfoDto updateUser = userService.updateNickname("old");
+        UserInfoDto updateUser = userService.updateNickname(changeNickname, token);
         String newNick = updateUser.getNickname();
 
         // then

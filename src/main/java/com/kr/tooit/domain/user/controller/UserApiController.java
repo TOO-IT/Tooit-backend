@@ -6,6 +6,7 @@ import com.kr.tooit.domain.user.dto.UserUpdateDto;
 import com.kr.tooit.domain.user.service.UserService;
 import com.kr.tooit.domain.vote.dto.VoteSliceResponse;
 import com.kr.tooit.domain.vote.service.VoteService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,11 @@ public class UserApiController {
      * @return UserInfoDto
      */
     @PutMapping("/nickname")
-    public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserUpdateDto request) {
-        UserInfoDto response = userService.updateNickname(request.getNickname());
+    public ResponseEntity<UserInfoDto> updateNickname(@RequestBody @NotNull UserUpdateDto dto,
+                                                      HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        UserInfoDto response = userService.updateNickname(dto.getNickname(), token);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -53,12 +57,12 @@ public class UserApiController {
      */
     @GetMapping("/myPage/vote")
     public ResponseEntity<VoteSliceResponse> getMyVotes(@RequestParam(value = "size", defaultValue = "10") int size,
-                                                        @RequestParam(value = "lastVoteId", defaultValue = "0") Long lastVoteId
+                                                        @RequestParam(value = "lastVoteId", defaultValue = "0") Long lastVoteId,
+                                                        HttpServletRequest request
     ) {
         // 현재 로그인 중인 user Id 가져오기
-        Long currentUserId = userService.getCurrentUserId();
-
-        VoteSliceResponse result = voteService.getMyVotes(currentUserId, size, lastVoteId);
+        String token = request.getHeader("Authorization");
+        VoteSliceResponse result = voteService.getMyVotes(token, size, lastVoteId);
         return ResponseEntity.ok(result);
     }
 }

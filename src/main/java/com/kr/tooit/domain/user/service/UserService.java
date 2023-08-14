@@ -19,16 +19,16 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final TokenService tokenService;
+
+
+
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 
-    public User findById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-    }
 
     /**
      * Refresh Token으로 UserInfo 조회
@@ -54,9 +54,9 @@ public class UserService {
      * @return UserInfoDto
      */
     @Transactional
-    public UserInfoDto updateNickname(String nickname) {
+    public UserInfoDto updateNickname(String nickname, String token) {
 
-        Long userId = getCurrentUserId();
+        Long userId = getCurrentUserId(token); // 토큰 값으로 userId 가져오기
 
         Optional<User> findUser = userRepository.findById(userId);
 
@@ -118,10 +118,7 @@ public class UserService {
      * 현재 로그인한 사용자 ID 반환
      * @return userId
      */
-    public Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User findUser = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return findUser.getId();
+    public Long getCurrentUserId(String token) {
+        return tokenService.getUserId(token);
     }
 }
