@@ -29,7 +29,7 @@ public class VoteItemService {
 
 	public String uploadFile(MultipartFile multipartFile) throws IOException {
 
-		if(multipartFile.isEmpty()) return "";
+		if(multipartFile.isEmpty() || multipartFile.getOriginalFilename().length() == 0) return "";
 
 		String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
 
