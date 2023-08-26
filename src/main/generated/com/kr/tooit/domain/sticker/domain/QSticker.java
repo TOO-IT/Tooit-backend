@@ -22,8 +22,6 @@ public class QSticker extends EntityPathBase<Sticker> {
 
     public static final QSticker sticker = new QSticker("sticker");
 
-    public final StringPath annym = createString("annym");
-
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

@@ -32,7 +32,7 @@ public class Sticker {
 
     private String content; // 설명
 
-    private String annym; // 익명여부 ('Y'/'N')
+    //private String annym; // 익명여부 ('Y'/'N')
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -48,13 +48,13 @@ public class Sticker {
 
 
     @Builder
-    public Sticker (String image, String locationX, String locationY, String nickname, String content, String annym, User user, VoteItem voteItem) {
+    public Sticker (String image, String locationX, String locationY, String nickname, String content, User user, VoteItem voteItem) {
         this.image = image;
         this.locationX = locationX;
         this.locationY = locationY;
         this.nickname = nickname;
         this.content = content;
-        this.annym = annym;
+        //this.annym = annym;
         this.user = user;
         this.voteItem = voteItem;
     }
@@ -70,13 +70,13 @@ public class Sticker {
 //        this.voteItem = voteItem;
 //    }
 
-    public void update(String image, String locationX, String locationY, String nickname, String content, String annym) {
+    public void update(String image, String locationX, String locationY, String nickname, String content) {
         this.image = image;
         this.locationX = locationX;
         this.locationY = locationY;
         this.nickname = nickname;
         this.content = content;
-        this.annym = annym;
+        //this.annym = annym;
     }
 
     public void addUser(User user) {
@@ -99,10 +99,10 @@ public class Sticker {
         }
     }
 
-    @PrePersist
-    void onPrePersist() {
-        this.annym = "N";
-    }
+//    @PrePersist
+//    void onPrePersist() {
+//        this.annym = "N";
+//    }
 
     @PreUpdate
     void onPreUpdate() {
