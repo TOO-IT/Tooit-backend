@@ -32,6 +32,8 @@ public class QVoteItem extends EntityPathBase<VoteItem> {
 
     public final NumberPath<Integer> stickerCount = createNumber("stickerCount", Integer.class);
 
+    public final ListPath<com.kr.tooit.domain.sticker.domain.Sticker, com.kr.tooit.domain.sticker.domain.QSticker> stickers = this.<com.kr.tooit.domain.sticker.domain.Sticker, com.kr.tooit.domain.sticker.domain.QSticker>createList("stickers", com.kr.tooit.domain.sticker.domain.Sticker.class, com.kr.tooit.domain.sticker.domain.QSticker.class, PathInits.DIRECT2);
+
     public final com.kr.tooit.domain.vote.domain.QVote vote;
 
     public QVoteItem(String variable) {
