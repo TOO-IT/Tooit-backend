@@ -1,10 +1,7 @@
 package com.kr.tooit.domain.sticker.service;
 
 import com.kr.tooit.domain.sticker.domain.Sticker;
-import com.kr.tooit.domain.sticker.dto.StickerDetailResponse;
-import com.kr.tooit.domain.sticker.dto.StickerIdListRequest;
-import com.kr.tooit.domain.sticker.dto.StickerSaveRequest;
-import com.kr.tooit.domain.sticker.dto.StickerUpdateRequest;
+import com.kr.tooit.domain.sticker.dto.*;
 import com.kr.tooit.domain.user.domain.NonUsers;
 import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.user.service.NonUserService;
@@ -30,7 +27,14 @@ public class StickerService {
     private final VoteItemService voteItemService;
     private final FileService fileService;
 
-    // Sticker 저장
+
+    /**
+     * Sticker 저장 (투표)
+     * @param request
+     * @param image
+     * @return
+     * @throws IOException
+     */
     @Transactional
     public StickerDetailResponse save(StickerSaveRequest request, MultipartFile image) throws IOException {
 
@@ -81,6 +85,7 @@ public class StickerService {
         return response;
     }
 
+
     // Sticker 수정
     @Transactional
     public StickerDetailResponse update(Long id, StickerUpdateRequest request) {
@@ -90,16 +95,15 @@ public class StickerService {
         return response;
     }
 
-    // Sticker 삭제 -- 미사용? 기능 확인 필요
+    /**
+     * Sticker 삭제
+     * @param request
+     */
     @Transactional
-    public void delete(StickerIdListRequest list) {
-        /*
-        List<Long> ids = list.getId();
+    public void delete(StickerDeleteRequest request) {
+        stickerRepository.deleteById(request.getStickerId());
 
-        for(Long id : ids) {
-            Optional<Sticker> findVote = stickerRepository.findById(id);
-            findVote.get().deleteUpdate();
-        }
-         */
+        VoteItem voteItem = voteItemService.findVoteItem(request.getVoteItemId());
+        voteItemService.decreaseStickerCount(voteItem);
     }
 }

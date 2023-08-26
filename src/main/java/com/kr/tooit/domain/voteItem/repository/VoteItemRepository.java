@@ -13,4 +13,8 @@ public interface VoteItemRepository extends JpaRepository<VoteItem, Long> {
     @Modifying
     @Query("update VoteItem set stickerCount = stickerCount + 1 where id = :voteItemId")
     void updateStickerCount(Long voteItemId);
+
+    @Modifying
+    @Query("update VoteItem set stickerCount = stickerCount - 1 where id = :voteItemId")
+    void decreaseStickerCount(Long voteItemId);
 }
