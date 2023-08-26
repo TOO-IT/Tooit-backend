@@ -19,7 +19,7 @@ public class NonUsers {
     @Column(unique = true, nullable = false)
     private String ip;
 
-    private String nickname;
+    //private String nickname;
 
     @CreatedDate
     private LocalDateTime createDate;
