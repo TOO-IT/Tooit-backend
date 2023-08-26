@@ -1,24 +1,25 @@
 package com.kr.tooit.domain.sticker.dto;
 
 import com.kr.tooit.domain.sticker.domain.Sticker;
-import com.kr.tooit.domain.user.domain.User;
-import com.kr.tooit.domain.voteItem.domain.VoteItem;
+import com.kr.tooit.domain.user.domain.NonUsers;
 import lombok.Data;
 
 @Data
 public class StickerSaveRequest {
-    private Long id;
-    private String image;
-    private String location;
+    private String locationX;
+    private String locationY;
     private String nickname;
     private String content;
-    private String annym;
-
-    private User user;
-    private VoteItem voteItem;
+    private Long voteItemId;
+    private NonUsers nonUser;
 
     public Sticker toEntity() {
-        return Sticker.builder().image(image).location(location).nickname(nickname).content(content).annym(annym).user(user).voteItem(voteItem).build();
+        return Sticker.builder()
+                .locationX(locationX)
+                .locationY(locationY)
+                .nickname(nickname)
+                .content(content)
+                .build();
     }
 }
 

@@ -30,13 +30,15 @@ public class QSticker extends EntityPathBase<Sticker> {
 
     public final StringPath image = createString("image");
 
-    public final StringPath location = createString("location");
+    public final StringPath locationX = createString("locationX");
+
+    public final StringPath locationY = createString("locationY");
 
     public final StringPath nickname = createString("nickname");
 
-    public final com.kr.tooit.domain.user.domain.QUser user;
+    public final com.kr.tooit.domain.user.domain.QNonUsers nonUser;
 
-    public final com.kr.tooit.domain.vote.domain.QVote vote;
+    public final com.kr.tooit.domain.user.domain.QUser user;
 
     public final com.kr.tooit.domain.voteItem.domain.QVoteItem voteItem;
 
@@ -58,8 +60,8 @@ public class QSticker extends EntityPathBase<Sticker> {
 
     public QSticker(Class<? extends Sticker> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.nonUser = inits.isInitialized("nonUser") ? new com.kr.tooit.domain.user.domain.QNonUsers(forProperty("nonUser")) : null;
         this.user = inits.isInitialized("user") ? new com.kr.tooit.domain.user.domain.QUser(forProperty("user")) : null;
-        this.vote = inits.isInitialized("vote") ? new com.kr.tooit.domain.vote.domain.QVote(forProperty("vote"), inits.get("vote")) : null;
         this.voteItem = inits.isInitialized("voteItem") ? new com.kr.tooit.domain.voteItem.domain.QVoteItem(forProperty("voteItem"), inits.get("voteItem")) : null;
     }
 

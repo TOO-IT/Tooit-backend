@@ -1,7 +1,7 @@
 package com.kr.tooit.domain.sticker.domain;
 
+import com.kr.tooit.domain.user.domain.NonUsers;
 import com.kr.tooit.domain.user.domain.User;
-import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,7 +23,10 @@ public class Sticker {
     private String image; // 이미지
 
     @Column(nullable = false)
-    private String location; // 위치
+    private String locationX; // X 위치
+
+    @Column(nullable = false)
+    private String locationY; // Y 위치
 
     private String nickname; // 닉네임
 
@@ -36,8 +39,8 @@ public class Sticker {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "VOTE_ID")
-    private Vote vote;
+    @JoinColumn(name = "NON_USER_IP")
+    private NonUsers nonUser;
 
     @ManyToOne
     @JoinColumn(name = "ITEM_ID")
@@ -45,9 +48,10 @@ public class Sticker {
 
 
     @Builder
-    public Sticker (String image, String location, String nickname, String content, String annym, User user, VoteItem voteItem) {
+    public Sticker (String image, String locationX, String locationY, String nickname, String content, String annym, User user, VoteItem voteItem) {
         this.image = image;
-        this.location = location;
+        this.locationX = locationX;
+        this.locationY = locationY;
         this.nickname = nickname;
         this.content = content;
         this.annym = annym;
@@ -55,12 +59,44 @@ public class Sticker {
         this.voteItem = voteItem;
     }
 
-    public void update(String image, String location, String nickname, String content, String annym) {
+//    @Builder
+//    public Sticker (String image, String locationX, String locationY, String nickname, String content, String annym, VoteItem voteItem) {
+//        this.image = image;
+//        this.locationX = locationX;
+//        this.locationY = locationY;
+//        this.nickname = nickname;
+//        this.content = content;
+//        this.annym = annym;
+//        this.voteItem = voteItem;
+//    }
+
+    public void update(String image, String locationX, String locationY, String nickname, String content, String annym) {
         this.image = image;
-        this.location = location;
+        this.locationX = locationX;
+        this.locationY = locationY;
         this.nickname = nickname;
         this.content = content;
         this.annym = annym;
+    }
+
+    public void addUser(User user) {
+        if(this.user == null) this.user = user;
+    }
+
+    public void addNonUser(NonUsers anonymous) {
+        if(this.nonUser == null) this.nonUser = anonymous;
+    }
+
+    public void addVoteItem(VoteItem voteItem) {
+        if(this.voteItem == null) {
+            this.voteItem = voteItem;
+        }
+    }
+
+    public void addImage(String image) {
+        if(this.image == null) {
+            this.image = image;
+        }
     }
 
     @PrePersist
