@@ -13,18 +13,18 @@ import java.time.LocalDateTime;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Anonymous {
+public class NonUsers {
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "ANNYM_ID")
+//    private Long id;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ANNYM_ID")
-    private Long id;
-
     @Column(unique = true, nullable = false)
     private String ip;
 
     private String nickname;
 
     private LocalDateTime createDate;
-
 }

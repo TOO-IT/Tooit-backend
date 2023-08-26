@@ -10,31 +10,31 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QAnonymous is a Querydsl query type for Anonymous
+ * QNonUsers is a Querydsl query type for NonUsers
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QAnonymous extends EntityPathBase<Anonymous> {
+public class QNonUsers extends EntityPathBase<NonUsers> {
 
-    private static final long serialVersionUID = 525692677L;
+    private static final long serialVersionUID = -736690781L;
 
-    public static final QAnonymous anonymous = new QAnonymous("anonymous");
+    public static final QNonUsers nonUsers = new QNonUsers("nonUsers");
 
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath ip = createString("ip");
 
-    public QAnonymous(String variable) {
-        super(Anonymous.class, forVariable(variable));
+    public final StringPath nickname = createString("nickname");
+
+    public QNonUsers(String variable) {
+        super(NonUsers.class, forVariable(variable));
     }
 
-    public QAnonymous(Path<? extends Anonymous> path) {
+    public QNonUsers(Path<? extends NonUsers> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QAnonymous(PathMetadata metadata) {
-        super(Anonymous.class, metadata);
+    public QNonUsers(PathMetadata metadata) {
+        super(NonUsers.class, metadata);
     }
 
 }

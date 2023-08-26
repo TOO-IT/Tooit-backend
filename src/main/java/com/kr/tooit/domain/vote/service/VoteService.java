@@ -8,6 +8,7 @@ import com.kr.tooit.domain.vote.dto.*;
 import com.kr.tooit.domain.voteItem.domain.VoteItem;
 import com.kr.tooit.domain.voteItem.dto.VoteItemRequest;
 import com.kr.tooit.domain.voteItem.service.VoteItemService;
+import com.kr.tooit.global.config.util.FileService;
 import com.kr.tooit.global.error.CustomException;
 import com.kr.tooit.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -30,7 +31,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserService userService;
     private final VoteRepositoryPage voteRepositoryPage;
-    private final VoteItemService voteItemService;
+    private final FileService fileService;
 
     /**
      * Vote 리스트 조회 (최신순, 인기순)
@@ -119,7 +120,7 @@ public class VoteService {
         for(int i = 0; i < request.getItems().size(); i++) {
             VoteItemRequest item = request.getItems().get(i);
             VoteItem buildItem = VoteItem.builder()
-                    .image(voteItemService.uploadFile(multipartFile.get(i)))
+                    .image(fileService.uploadFile(multipartFile.get(i)))
                     .stickerCount(item.getStickerCount())
                     .name(item.getName())
                     .content(item.getContent())
@@ -131,7 +132,7 @@ public class VoteService {
         Vote vote = request.toEntity();
         items.stream().forEach(entity -> entity.setVote(vote));
 
-        vote.saveThumbnail(voteItemService.uploadFile(thumbnail));
+        vote.saveThumbnail(fileService.uploadFile(thumbnail));
 
         Vote entity = voteRepository.save(vote);
 
@@ -214,5 +215,9 @@ public class VoteService {
         }
 
         return new SliceImpl<>(list, pageable, hasNext);
+    }
+
+    public void updateVoteCount(Long voteId) {
+        voteRepository.updateVoteCount(voteId);
     }
 }

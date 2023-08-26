@@ -3,6 +3,9 @@ package com.kr.tooit.domain.voteItem.service;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.kr.tooit.domain.vote.service.VoteService;
+import com.kr.tooit.global.config.util.FileService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,32 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class VoteItemService {
-	private static final String VOTE_IMAGE_FOLDER = "voteImage/";
-	private final AmazonS3 s3Client;
+
 	private final VoteItemRepository voteItemRepository;
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
-
-	public String uploadFile(MultipartFile multipartFile) throws IOException {
-
-		if(multipartFile.isEmpty() || multipartFile.getOriginalFilename().length() == 0) return "";
-
-		String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
-
-		// 이미지가 있는지 확인하고 Content-Type을 설정
-		ObjectMetadata objectMetadata = new ObjectMetadata();
-		if (multipartFile.getContentType() != null) {
-			objectMetadata.setContentType(multipartFile.getContentType());
-		}
-
-		s3Client.putObject(
-			new PutObjectRequest(bucket, VOTE_IMAGE_FOLDER + fileName, multipartFile.getInputStream(), objectMetadata));
-
-		return s3Client.getUrl(bucket, VOTE_IMAGE_FOLDER + fileName).toString();
-	}
+	private final VoteService voteService;
+	private final FileService fileService;
 
 	public String saveVoteItem(VoteImage voteImage) throws IOException {
-		String imageUrl = uploadFile(voteImage.getImageFile());
+		String imageUrl = fileService.uploadFile(voteImage.getImageFile());
 
 		VoteItem voteItem = VoteItem.builder()
 			.image(imageUrl)
@@ -57,5 +41,18 @@ public class VoteItemService {
 
 		voteItemRepository.save(voteItem);
 		return imageUrl;
+	}
+
+	public VoteItem findVoteItem(Long voteItemId) {
+		return voteItemRepository.findById(voteItemId).orElse(null);
+	}
+
+	@Transactional
+	public void updateStickerCount(VoteItem voteItem) {
+		voteItemRepository.updateStickerCount(voteItem.getId());
+
+		// Vote voteCount update
+		System.out.println("vote Id : " + voteItem.getVote().getId());
+		voteService.updateVoteCount(voteItem.getVote().getId());
 	}
 }
