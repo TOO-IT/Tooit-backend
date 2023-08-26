@@ -43,6 +43,7 @@ public class VoteItemService {
 		return imageUrl;
 	}
 
+	// voteItem, Vote 투표 카운트 증가
 	public VoteItem findVoteItem(Long voteItemId) {
 		return voteItemRepository.findById(voteItemId).orElse(null);
 	}
@@ -52,7 +53,15 @@ public class VoteItemService {
 		voteItemRepository.updateStickerCount(voteItem.getId());
 
 		// Vote voteCount update
-		System.out.println("vote Id : " + voteItem.getVote().getId());
 		voteService.updateVoteCount(voteItem.getVote().getId());
+	}
+
+	// voteItem, vote 투표 카운트 감소
+	@Transactional
+	public void decreaseStickerCount(VoteItem voteItem) {
+		voteItemRepository.decreaseStickerCount(voteItem.getId());
+
+		// Vote voteCount decrease
+		voteService.decreaseVoteCount(voteItem.getVote().getId());
 	}
 }

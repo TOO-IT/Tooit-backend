@@ -16,4 +16,8 @@ public interface VoteRepository extends JpaRepository<Vote, Long>, JpaSpecificat
     @Modifying
     @Query("update Vote set voteCount = voteCount + 1 where id = :voteId")
     void updateVoteCount(Long voteId);
+
+    @Modifying
+    @Query("update Vote set voteCount = voteCount - 1 where id = :voteId")
+    void decreaseVoteCount(Long voteId);
 }

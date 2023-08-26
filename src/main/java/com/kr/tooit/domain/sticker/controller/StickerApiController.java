@@ -1,9 +1,6 @@
 package com.kr.tooit.domain.sticker.controller;
 
-import com.kr.tooit.domain.sticker.dto.StickerDetailResponse;
-import com.kr.tooit.domain.sticker.dto.StickerIdListRequest;
-import com.kr.tooit.domain.sticker.dto.StickerSaveRequest;
-import com.kr.tooit.domain.sticker.dto.StickerUpdateRequest;
+import com.kr.tooit.domain.sticker.dto.*;
 import com.kr.tooit.domain.sticker.service.StickerService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +24,16 @@ public class StickerApiController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<StickerDetailResponse> update(@RequestBody @NotNull StickerUpdateRequest request,
+    @PutMapping("/")
+    public ResponseEntity<StickerDetailResponse> reVote(@RequestBody @NotNull StickerUpdateRequest request,
                                                      @PathVariable("id") Long id) {
         StickerDetailResponse res = stickerService.update(id, request);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity delete(@RequestBody StickerIdListRequest list) {
-        stickerService.delete(list);
-        return ResponseEntity.ok(list);
+    @DeleteMapping("")
+    public ResponseEntity delete(@RequestBody StickerDeleteRequest request) {
+        stickerService.delete(request);
+        return ResponseEntity.ok("");
     }
 }

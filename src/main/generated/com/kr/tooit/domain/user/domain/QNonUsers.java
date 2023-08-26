@@ -23,8 +23,6 @@ public class QNonUsers extends EntityPathBase<NonUsers> {
 
     public final StringPath ip = createString("ip");
 
-    public final StringPath nickname = createString("nickname");
-
     public QNonUsers(String variable) {
         super(NonUsers.class, forVariable(variable));
     }

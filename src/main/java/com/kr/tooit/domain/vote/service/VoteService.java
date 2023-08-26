@@ -220,4 +220,8 @@ public class VoteService {
     public void updateVoteCount(Long voteId) {
         voteRepository.updateVoteCount(voteId);
     }
+
+    public void decreaseVoteCount(Long voteId) {
+        voteRepository.decreaseVoteCount(voteId);
+    }
 }
