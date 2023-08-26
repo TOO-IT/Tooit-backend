@@ -50,7 +50,7 @@ public class StickerService {
         if(request.getNonUser() != null) {
             NonUsers nonUser = request.getNonUser();
             nonUserService.save(nonUser);
-            Sticker findSticker = stickerRepository.findByNonUserIpAndVoteItemId(nonUser.getIp(), voteItem.getId());
+            Sticker findSticker = stickerRepository.findByNonUserIpAndVoteId(nonUser.getIp(), request.getVoteId());
 
             if(findSticker != null) {
                 throw new CustomException(ErrorCode.HAS_STICKER);
@@ -64,7 +64,7 @@ public class StickerService {
             if(user == null) throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
             // 중복 투표 검사
-            Sticker findSticker = stickerRepository.findByUserIdAndVoteItemId(user.getId(), voteItem.getId());
+            Sticker findSticker = stickerRepository.findByUserIdAndVoteId(user.getId(), request.getVoteId());
 
             if(findSticker != null) {
                 throw new CustomException(ErrorCode.HAS_STICKER);
@@ -75,7 +75,6 @@ public class StickerService {
 
         sticker.addVoteItem(voteItem); // voteItem 매핑
         sticker.addImage(fileService.uploadFile(image)); // 스티커 이미지 저장
-
 
         Sticker entity = stickerRepository.save(sticker);
 
