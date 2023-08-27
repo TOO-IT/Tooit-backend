@@ -65,4 +65,23 @@ public class UserApiController {
         VoteSliceResponse result = voteService.getMyVotes(token, size, lastVoteId);
         return ResponseEntity.ok(result);
     }
+
+
+    /**
+     * 마이페이지 내가 투표한 게시글 조회
+     * @param size
+     * @param lastVoteId
+     * @param request
+     * @return
+     */
+    @GetMapping("/myPage/voting")
+    public ResponseEntity<VoteSliceResponse> getMyVotingToParticipateList(@RequestParam(value = "size", defaultValue = "10") int size,
+                                                                          @RequestParam(value = "lastVoteId", defaultValue = "0") Long lastVoteId,
+                                                                          HttpServletRequest request)
+    {
+        // 현재 로그인 중인 user id 가져오기
+        String token = request.getHeader("Authorization");
+        VoteSliceResponse result = voteService.getMyVotingToParticipateList(token, size, lastVoteId);
+        return ResponseEntity.ok(result);
+    }
 }

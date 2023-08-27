@@ -1,5 +1,7 @@
 package com.kr.tooit.domain.vote.service;
 
+import com.kr.tooit.domain.sticker.domain.QSticker;
+import com.kr.tooit.domain.user.domain.User;
 import com.kr.tooit.domain.vote.domain.QVote;
 import com.kr.tooit.domain.vote.domain.Vote;
 import com.kr.tooit.domain.vote.dto.VoteListResponse;
@@ -67,6 +69,28 @@ public class VoteRepositoryPage {
                 .fetch();
         return results;
     }
+
+    public List<Vote> getSliceMyVotingToParticipateList(Pageable pageable, User user) {
+        QVote vote = new QVote("v");
+        QSticker sticker = new QSticker("s");
+
+        List<Vote> results = queryFactory
+                .select(vote)
+                .from(vote, sticker)
+                .where(vote.id.eq(sticker.voteId),
+                        sticker.user.eq(user),
+                        vote.deadlineStatus.eq("N"),
+                        vote.deleteStatus.eq("N"),
+                        vote.shareTarget.eq("A"))
+                .orderBy(vote.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return results;
+
+    }
+
+
 
     private BooleanExpression ltVoteId(QVote vote, Long voteId) {
         if (voteId == null) {
