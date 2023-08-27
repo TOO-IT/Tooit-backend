@@ -51,7 +51,7 @@ public class VoteApiController {
      * @param request
      * @return ResponseEntity<VoteResponse>
      */
-    @PostMapping(value = "/write")
+    @PostMapping(value = "")
     public ResponseEntity<VoteDetailResponse> save(@RequestPart(value = "vote", required = true) VoteSaveRequest request,
                                                    @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile,
                                                    @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail) throws IOException {
