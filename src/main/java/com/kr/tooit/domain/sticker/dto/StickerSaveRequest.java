@@ -10,8 +10,10 @@ public class StickerSaveRequest {
     private String locationY;
     private String nickname;
     private String content;
+    private Long voteId;
     private Long voteItemId;
     private NonUsers nonUser;
+
 
     public Sticker toEntity() {
         return Sticker.builder()
@@ -19,6 +21,7 @@ public class StickerSaveRequest {
                 .locationY(locationY)
                 .nickname(nickname)
                 .content(content)
+                .voteId(voteId)
                 .build();
     }
 }

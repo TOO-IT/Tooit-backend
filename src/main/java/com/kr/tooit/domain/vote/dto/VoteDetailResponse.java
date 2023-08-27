@@ -23,6 +23,8 @@ public class VoteDetailResponse {
     private String nickname;
     private List<VoteItemResponse> items;
 
+    private int voteCount;
+
     private String thumbnail;
 
 
@@ -40,5 +42,6 @@ public class VoteDetailResponse {
         this.nickname = entity.getUser().getNickname();
         this.items = entity.getItems().stream().map(VoteItemResponse::new).collect(Collectors.toList());
         this.thumbnail = entity.getThumbnail();
+        this.voteCount = entity.getVoteCount();
     }
 }

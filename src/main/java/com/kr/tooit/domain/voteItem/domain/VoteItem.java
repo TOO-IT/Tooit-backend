@@ -1,5 +1,6 @@
 package com.kr.tooit.domain.voteItem.domain;
 
+import com.kr.tooit.domain.sticker.domain.Sticker;
 import com.kr.tooit.domain.vote.domain.Vote;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Fetch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "ITEM")
@@ -32,6 +36,9 @@ public class VoteItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")
     private Vote vote;
+
+    @OneToMany(mappedBy = "voteItem")
+    List<Sticker> stickers = new ArrayList<>();
 
     @Builder
     public VoteItem(String image, int stickerCount, String name, String content, Vote vote) {

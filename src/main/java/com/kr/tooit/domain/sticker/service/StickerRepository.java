@@ -12,7 +12,7 @@ import java.util.List;
 public interface StickerRepository extends JpaRepository<Sticker, Long>, JpaSpecificationExecutor<Sticker> {
     List<Sticker> findAll(Specification<Sticker> spec);
 
-    Sticker findByUserIdAndVoteItemId(Long userId, Long voteItemId);
+    Sticker findByUserIdAndVoteId(Long userId, Long voteItemId);
 
-    Sticker findByNonUserIpAndVoteItemId(String ip, Long id);
+    Sticker findByNonUserIpAndVoteId(String ip, Long id);
 }

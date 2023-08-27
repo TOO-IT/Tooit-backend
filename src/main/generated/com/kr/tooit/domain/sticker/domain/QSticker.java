@@ -38,6 +38,8 @@ public class QSticker extends EntityPathBase<Sticker> {
 
     public final com.kr.tooit.domain.user.domain.QUser user;
 
+    public final NumberPath<Long> voteId = createNumber("voteId", Long.class);
+
     public final com.kr.tooit.domain.voteItem.domain.QVoteItem voteItem;
 
     public QSticker(String variable) {
