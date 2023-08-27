@@ -206,6 +206,25 @@ public class VoteService {
         return res;
     }
 
+    public VoteSliceResponse getMyVotingToParticipateList(String token, int size, Long lastVoteId) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        // token 값으로 user id 구하기
+        Long userId = userService.getCurrentUserId(token);
+
+        User user = userService.getCurrentUser();
+
+        List<Vote> list = voteRepositoryPage.getSliceMyVotingToParticipateList(pageable, user);
+
+        List<VoteMyVoteListResponse> result = list.stream().map(entity -> new VoteMyVoteListResponse(entity)).collect(Collectors.toList());
+
+        Slice<VoteMyVoteListResponse> voteListResponses = checkMyLastPage(pageable, result);
+
+        VoteSliceResponse res = new VoteSliceResponse(voteListResponses.hasNext(), result);
+
+        return res;
+    }
+
     private Slice<VoteMyVoteListResponse> checkMyLastPage(Pageable pageable, List<VoteMyVoteListResponse> list) {
         boolean hasNext = false;
 
@@ -224,4 +243,6 @@ public class VoteService {
     public void decreaseVoteCount(Long voteId) {
         voteRepository.decreaseVoteCount(voteId);
     }
+
+
 }
