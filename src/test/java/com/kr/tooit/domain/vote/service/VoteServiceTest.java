@@ -58,7 +58,7 @@ class VoteServiceTest {
 
     @DisplayName("테스트 데이터 추가")
     @Test
-    public void TestDate() {
+    public void testData() {
 
         /* user 테이블에 user 데이터가 두 개는 있어야 함 */
         // user1 --> vote 생성
