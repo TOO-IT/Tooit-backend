@@ -58,7 +58,7 @@ class VoteServiceTest {
 
     @DisplayName("테스트 데이터 추가")
     @Test
-    public void TestDate() {
+    public void testData() {
 
         /* user 테이블에 user 데이터가 두 개는 있어야 함 */
         // user1 --> vote 생성
@@ -112,6 +112,7 @@ class VoteServiceTest {
                     .locationX(i + ".4")
                     .locationY(i + 1 + ".7")
                     .nickname("스티커 테스트")
+                    .content("스티커 테스트 ")
                     .user(allUsers.get(allUsers.size() - 2))
                     .voteId(savedItem.getVote().getId())
                     .build());
