@@ -91,7 +91,7 @@ public class Vote {
 
     @Builder
     public Vote(String title, String content, String startDate, String endDate,
-                String shareTarget, int dDay, User user) {
+                String shareTarget, User user, int dDay, String thumbnail) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -99,6 +99,7 @@ public class Vote {
         this.shareTarget = shareTarget;
         this.dDay = dDay;
         this.user = user;
+        this.thumbnail = thumbnail;
     }
 
     public VoteListResponse toEntity() {
