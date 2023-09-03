@@ -13,6 +13,7 @@ public class StickerSaveRequest {
     private Long voteId;
     private Long voteItemId;
     private NonUsers nonUser;
+    private String image;
 
 
     public Sticker toEntity() {
@@ -22,6 +23,7 @@ public class StickerSaveRequest {
                 .nickname(nickname)
                 .content(content)
                 .voteId(voteId)
+                .image(image)
                 .build();
     }
 }

@@ -19,7 +19,7 @@ public class StickerApiController {
 
     @PostMapping("")
     public ResponseEntity<StickerDetailResponse> save(@RequestPart(value = "sticker", required = true) StickerSaveRequest request,
-                                                      @RequestPart(value = "image", required = true) MultipartFile image) throws IOException {
+                                                      @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
         StickerDetailResponse res = stickerService.save(request, image);
         return ResponseEntity.ok(res);
     }

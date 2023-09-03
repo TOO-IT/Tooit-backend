@@ -74,7 +74,15 @@ public class StickerService {
         }
 
         sticker.addVoteItem(voteItem); // voteItem 매핑
-        sticker.addImage(fileService.uploadFile(image)); // 스티커 이미지 저장
+
+        // multipart image가 null이고, StickerSaveRequest 객체에 image가 String으로 넘어온 경우
+        // 즉, 기본 스티커 이미지인 경우
+        if(image == null && request.getImage() != null) {
+            sticker.addImage(request.getImage());
+        }
+        else {
+            sticker.addImage(fileService.uploadFile(image)); // 스티커 이미지 저장
+        }
 
         Sticker entity = stickerRepository.save(sticker);
 
