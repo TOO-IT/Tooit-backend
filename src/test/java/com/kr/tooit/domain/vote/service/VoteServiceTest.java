@@ -112,6 +112,7 @@ class VoteServiceTest {
                     .locationX(i + ".4")
                     .locationY(i + 1 + ".7")
                     .nickname("스티커 테스트")
+                    .content("스티커 테스트 ")
                     .user(allUsers.get(allUsers.size() - 2))
                     .voteId(savedItem.getVote().getId())
                     .build());
