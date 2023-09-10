@@ -29,7 +29,7 @@ public class VoteRepositoryPage {
         List<Vote> results = queryFactory.selectFrom(vote)
                 .where(
                         ltVoteId(vote, lastVoteId),
-                        vote.deadlineStatus.eq("N"),
+                        //vote.deadlineStatus.eq("N"),
                         vote.deleteStatus.eq("N"),
                         vote.shareTarget.eq("A")
                 )
@@ -44,7 +44,7 @@ public class VoteRepositoryPage {
         QVote vote = new QVote("v");
         List<Vote> results = queryFactory.selectFrom(vote)
                 .where(
-                        vote.deadlineStatus.eq("N"),
+                        //vote.deadlineStatus.eq("N"),
                         vote.deleteStatus.eq("N"),
                         vote.shareTarget.eq("A")
                 )
@@ -59,7 +59,7 @@ public class VoteRepositoryPage {
         QVote vote = new QVote("v");
         List<Vote> results = queryFactory.selectFrom(vote)
                 .where(
-                        vote.deadlineStatus.eq("N"),
+                        //vote.deadlineStatus.eq("N"),
                         vote.deleteStatus.eq("N"),
                         vote.shareTarget.eq("A"),
                         vote.user.id.eq(id)
@@ -79,7 +79,7 @@ public class VoteRepositoryPage {
                 .from(vote, sticker)
                 .where(vote.id.eq(sticker.voteId),
                         sticker.user.eq(user),
-                        vote.deadlineStatus.eq("N"),
+                        //vote.deadlineStatus.eq("N"),
                         vote.deleteStatus.eq("N"),
                         vote.shareTarget.eq("A"))
                 .orderBy(vote.id.desc())
